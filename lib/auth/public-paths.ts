@@ -8,6 +8,8 @@ export const PUBLIC_PATHS: RegExp[] = [
   // Link público persistido: org e destino são resolvidos exclusivamente no servidor.
   /^\/api\/v1\/rastreio\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
   /^\/$/,
+  // 公开产品展示页：给客户看的只读目录，数据层只取可公开的列（lib/shop/storefront.ts）。
+  /^\/shop\/[a-z0-9-]+$/,
   /^\/login(\/.*)?$/,
   /^\/signup$/,
   /^\/auth\/confirm$/,
