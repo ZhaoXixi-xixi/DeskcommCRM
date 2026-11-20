@@ -92,10 +92,9 @@ export const REGISTRO_DE_IDIOMAS = [
     rotuloCurto: "中",
     tagBcp47: "zh-CN",
     subtagsDoNavegador: ["zh"],
-    // A tradução chega pelo PR #773, de @xxjjjj. Registrar o idioma antes do
-    // catálogo é o que deixa o catálogo entrar sem aparecer para ninguém.
-    nivel: "em_construcao",
-    mantenedor: null,
+    // 中文目录补全后提升为可见：缺译的句子按 telas_principais 规则回落到葡语。
+    nivel: "telas_principais",
+    mantenedor: "ZhaoXixi-xixi",
   },
   {
     codigo: "en",
