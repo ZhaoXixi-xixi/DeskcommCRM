@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api/client";
+import { DRAFT_REPLY_TIMEOUT_MS } from "@/hooks/inbox/useDraftReply";
 import { showApiError } from "@/components/feedback/ApiErrorToast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -45,7 +46,9 @@ export function ReplyReviewPanel({
     setNotice(null);
     setBusy(true);
     try {
-      await apiClient.post(`/api/v1/conversations/${conversationId}/draft-reply`, {});
+      await apiClient.post(`/api/v1/conversations/${conversationId}/draft-reply`, {}, {
+        timeoutMs: DRAFT_REPLY_TIMEOUT_MS,
+      });
       await qc.invalidateQueries({ queryKey: key });
     } catch (e) {
       showApiError(e);
