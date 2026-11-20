@@ -122,16 +122,15 @@ export const GRUPO_NO_RODAPE: NavGroupId = "organizacao";
  * menu e o segundo anuncia o passo do hub, o produto mente para quem liga o módulo. A condição
  * estava ESCRITA NOS DOIS — copiada —, e cópia de regra diverge sem avisar.
  *
- * `temEscolhaExplicita` é "a empresa escreveu lista de áreas à mão". Ele só importa para grupo SEM
- * hub: ali não há "Ver tudo" para hospedar a porta, então ela sobe ao menu quando a empresa
- * personalizou. Com hub, quem decide é só o `sidebar` do destino.
+ * `temEscolhaExplicita` é "a empresa escreveu lista de áreas à mão". 公司手写了菜单清单，清单
+ * 本身就是"常用"的定义：清单里的每一项都直接进侧边栏，不再藏在"查看全部"后面。只有页脚分组
+ * （设置）例外，它的入口固定在页脚。
  */
 export function sobeAoMenuLateral(
   d: Pick<NavMetadata, "sidebar" | "group">,
   temEscolhaExplicita: boolean,
 ): boolean {
-  const grupo = NAV_GROUPS.find((g) => g.id === d.group);
-  return !!d.sidebar || (!grupo?.hub && temEscolhaExplicita);
+  return !!d.sidebar || (temEscolhaExplicita && d.group !== GRUPO_NO_RODAPE);
 }
 
 /**

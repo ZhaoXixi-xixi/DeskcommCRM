@@ -46,6 +46,7 @@ import {
 } from "@/lib/ui/icons";
 
 import {
+  GRUPO_NO_RODAPE,
   NAV_CATALOG,
   NAV_GROUPS,
   type NavMetadata,
@@ -129,8 +130,11 @@ export function sidebarGroups(
   const visible = new Set<string>(
     destinosDaInterface(settings, isPlatformAdmin, role, modulos, capacidades).map((d) => d.href),
   );
+  // 手写清单时所有项都已摊开在侧边栏，"查看全部"入口没有东西可藏，一并去掉（页脚的设置保留）。
+  const semHub = (group: NavGroup): NavGroup =>
+    settings?.destinos && group.id !== GRUPO_NO_RODAPE ? { ...group, hub: undefined } : group;
   return NAV_GROUPS.map((group) => ({
-    group,
+    group: semHub(group),
     items: NAV_DESTINATIONS.filter(
       (d) =>
         d.group === group.id &&
