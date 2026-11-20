@@ -15076,5 +15076,6 @@
   "oi": "你好",
   "turno": "轮",
   "turnos": "轮",
-  "Logo de quem instalou o sistema": "系统安装方的 Logo"
+  "Logo de quem instalou o sistema": "系统安装方的 Logo",
+  "## Idioma da conversa\nEsta organização atende em português (Brasil). Responda ao lead nesse idioma e no idioma em que ele escrever — siga a pessoa, não imponha o seu. O texto das suas instruções internas não é a língua do atendimento: se o lead escreve em espanhol ou em inglês, a resposta sai em espanhol ou em inglês, mesmo que as regras acima estejam em português.": "## Conversation language\nAlways reply in the language the customer writes in — follow the person, never impose yours. If you cannot tell which language they use, reply in English. The language of your internal instructions is NOT the conversation language: even when the rules above are written in Portuguese or Chinese, the reply goes out in the customer's own language."
 }
