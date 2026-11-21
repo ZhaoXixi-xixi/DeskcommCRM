@@ -147,7 +147,12 @@ export function ReplyReviewPanel({
               rows={3}
             />
           )}
-          {body && <TraducaoDoTexto conversationId={conversationId} texto={body} className="mt-0 border-t-0 pt-0 text-sm" />}
+          {/* 译文跟的是已保存的草稿，不是正在改的文字：否则每敲一个字就要翻译一次。 */}
+          <TraducaoDoTexto
+            conversationId={conversationId}
+            texto={draft.edited_body ?? draft.original_body ?? ""}
+            className="mt-0 border-t-0 pt-0 text-sm"
+          />
           {draft.proposals.length > 0 && (
             <details className="text-xs">
               <summary>{t("Ações propostas: precisam de autorização separada")}</summary>

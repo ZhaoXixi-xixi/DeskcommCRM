@@ -157,6 +157,10 @@ export function pontuar(produto: ProdutoBuscavel, tokens: TokensDaBusca): number
       // uma letra E troca outra). Abaixo de 5 letras a tolerância vira ruído —
       // "mac" alcançaria "max", que é outro produto.
       else if (p.length >= 5 && distanciaAte(p, t, 2)) nota = mesmaInicial ? 0.6 : 0;
+      // 中文、日文、泰文不用空格分词：客户的一整句「你们有欧米茄的手表吗」是一个
+      // 词，产品的「欧米茄」是另一个，前缀和编辑距离都对不上。这类文字改看
+      // 「一个是否包含另一个」，两个字起算，单个字不算数。
+      else if (contidaSemEspacos(p, t)) nota = 0.9;
       if (nota > melhor) melhor = nota;
     }
     soma += melhor;
@@ -164,6 +168,15 @@ export function pontuar(produto: ProdutoBuscavel, tokens: TokensDaBusca): number
 
   if (soma === 0) return null;
   return soma / tokens.palavras.length;
+}
+
+/** 不用空格分词的文字（中文、日文假名、泰文）。 */
+const ESCRITA_SEM_ESPACOS = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Thai}]/u;
+
+/** 两个词都是不分词的文字，且较短的那个（至少两个字）整个出现在较长的里面。 */
+function contidaSemEspacos(a: string, b: string): boolean {
+  const [curta, longa] = a.length <= b.length ? [a, b] : [b, a];
+  return curta.length >= 2 && ESCRITA_SEM_ESPACOS.test(curta) && longa.includes(curta);
 }
 
 /** As duas palavras diferem por no máximo `teto` edições? */
