@@ -21,7 +21,12 @@ export function productUrl(origin: string, slug: string, code: string): string {
   return `${origin}/shop/${slug}?p=${encodeURIComponent(code)}`;
 }
 
-/** WhatsApp 里 *星号* 包住的文字显示为粗体。没有的项目（品牌、价格）整行不出现。 */
+/**
+ * WhatsApp 里 *星号* 包住的文字显示为粗体。没有的项目（品牌、价格）不出现。
+ *
+ * 写成一行、用「 · 」隔开，不用换行：附件预览框的说明是单行输入框，换行会被
+ * 丢掉，价格和链接粘在一起后链接就打不开了。
+ */
 export function productCaption(product: Pick<ShopProduct, "name" | "brand"> & Priced, url: string): string {
-  return [`*${product.name}*`, product.brand, priceLabel(product), url].filter(Boolean).join("\n");
+  return [`*${product.name}*`, product.brand, priceLabel(product), url].filter(Boolean).join(" · ");
 }
