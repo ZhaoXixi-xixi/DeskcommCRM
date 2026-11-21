@@ -23,7 +23,7 @@ interface Props {
 }
 
 function Miniatura({ product }: { product: ShopProduct }) {
-  const src = product.photos[0];
+  const src = product.photos[0]?.thumb;
   if (!src) {
     return (
       <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-muted">

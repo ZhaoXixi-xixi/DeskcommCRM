@@ -1,13 +1,15 @@
 import "server-only";
 
-import { BUCKET_DAS_FOTOS, fotoPertenceAoProduto } from "@/lib/catalogo/fotos";
+import { fotoPertenceAoProduto } from "@/lib/catalogo/fotos";
 import { createAdminClient } from "@/lib/supabase/admin";
+
+import { externalPhoto, signShopPhotos, type ShopPhoto } from "./photos";
 
 /**
  * 公开产品展示页（/shop/<组织 slug>）的数据层。
  *
  * 展示页不登录，所以这里用 service role 读库、绕过 RLS —— 因此只取可以公开的列：
- * 成本价、库存一律不出现在 select 里。图片桶是私有的，这里签发限时链接。
+ * 成本价、库存一律不出现在 select 里。图片桶是私有的，限时链接由 ./photos 签发。
  *
  * 产品编码（codigo）是公开的：它是产品页链接 ?p=<编码> 的一部分，AI 查产品库
  * 拿到的也是它，这样 AI 和客服发出去的链接都能直接打开对应的产品。
@@ -24,7 +26,7 @@ export interface ShopProduct {
   category: string;
   priceCents: number | null;
   currency: string;
-  photos: string[];
+  photos: ShopPhoto[];
 }
 
 export interface Shop {
@@ -51,7 +53,6 @@ interface ProductRow {
 // ------------------------------------------------------------------ 常量
 
 export const UNCATEGORIZED = "Other";
-const PHOTO_TTL_SECONDS = 24 * 60 * 60;
 const MAX_PRODUCTS = 500;
 const PUBLIC_COLUMNS = "id, codigo, nome, descricao, marca, categoria, preco_cents, moeda, fotos, imagem_url";
 
@@ -59,18 +60,8 @@ const PUBLIC_COLUMNS = "id, codigo, nome, descricao, marca, categoria, preco_cen
 
 type Admin = ReturnType<typeof createAdminClient>;
 
-async function signPhotos(admin: Admin, paths: string[]): Promise<Map<string, string>> {
-  const signed = new Map<string, string>();
-  if (paths.length === 0) return signed;
-  const { data } = await admin.storage.from(BUCKET_DAS_FOTOS).createSignedUrls(paths, PHOTO_TTL_SECONDS);
-  for (const item of data ?? []) {
-    if (item.path && item.signedUrl) signed.set(item.path, item.signedUrl);
-  }
-  return signed;
-}
-
-function toProduct(row: ProductRow, own: string[], signed: Map<string, string>, currency: string): ShopProduct {
-  const uploaded = own.map((path) => signed.get(path)).filter((url): url is string => !!url);
+function toProduct(row: ProductRow, own: string[], signed: Map<string, ShopPhoto>, currency: string): ShopProduct {
+  const uploaded = own.map((path) => signed.get(path)).filter((photo): photo is ShopPhoto => !!photo);
   return {
     id: row.id,
     code: row.codigo,
@@ -80,7 +71,7 @@ function toProduct(row: ProductRow, own: string[], signed: Map<string, string>, 
     category: row.categoria?.trim() || UNCATEGORIZED,
     priceCents: row.preco_cents,
     currency: row.moeda ?? currency,
-    photos: uploaded.length > 0 || !row.imagem_url ? uploaded : [row.imagem_url],
+    photos: uploaded.length > 0 || !row.imagem_url ? uploaded : [externalPhoto(row.imagem_url)],
   };
 }
 
@@ -135,7 +126,7 @@ export async function loadShop(key: ShopKey): Promise<Shop | null> {
   const ownPhotos = new Map(
     list.map((row) => [row.id, (row.fotos ?? []).filter((path) => fotoPertenceAoProduto(path, org.id, row.id))]),
   );
-  const signed = await signPhotos(admin, [...ownPhotos.values()].flat());
+  const signed = await signShopPhotos(admin, [...ownPhotos.values()].flat());
   const products = list.map((row) => toProduct(row, ownPhotos.get(row.id) ?? [], signed, org.currency ?? "USD"));
 
   return {

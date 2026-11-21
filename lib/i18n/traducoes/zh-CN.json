@@ -15087,5 +15087,6 @@
   "Enviar produto": "发送产品",
   "Escolha um produto. Você revisa a foto e o texto antes de enviar.": "选一个产品。发送前可以先检查图片和文字。",
   "Loja não encontrada.": "找不到店铺。",
-  "Produto": "产品"
+  "Produto": "产品",
+  "JPG, PNG ou WebP, até 5 MB. No máximo 5 fotos. WebP é convertido para JPG.": "支持 JPG、PNG、WebP，每张不超过 5 MB，最多 5 张。WebP 会自动转成 JPG。"
 }

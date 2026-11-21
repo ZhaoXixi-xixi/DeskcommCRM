@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { priceLabel } from "@/lib/shop/product-message";
+import type { ShopPhoto } from "@/lib/shop/photos";
 import { loadShop, type Shop, type ShopProduct } from "@/lib/shop/storefront";
 
 /**
@@ -100,7 +101,7 @@ function CategoryChips({ slug, shop, active }: { slug: string; shop: Shop; activ
 function ProductCard({ slug, product, category }: { slug: string; product: ShopProduct; category: string | undefined }) {
   return (
     <Link href={shopHref(slug, { c: category, p: product.code })} className="group block">
-      <Photo src={product.photos[0]} alt={product.name} className="aspect-square w-full rounded-2xl transition group-hover:opacity-90" />
+      <Photo src={product.photos[0]?.thumb} alt={product.name} className="aspect-square w-full rounded-2xl transition group-hover:opacity-90" />
       <h2 className="mt-3 line-clamp-2 text-sm font-medium text-neutral-900">{product.name}</h2>
       <p className="mt-1 text-sm font-semibold text-neutral-900">{formatPrice(product)}</p>
     </Link>
@@ -120,15 +121,55 @@ function ProductGrid({ slug, products, category }: { slug: string; products: Sho
   );
 }
 
+/** 一排几张：一张独占一行，两张并排，三张及以上一排三张（五张图正好两排）。 */
+const GALLERY_COLUMNS = ["grid-cols-1", "grid-cols-2", "grid-cols-3"] as const;
+const GALLERY_ID = "photos";
+
+/**
+ * 点开的大图：不用脚本，靠链接的 #锚点 显示（CSS 的 :target）。
+ * 整个黑色遮罩就是「关闭」链接，点任何地方都回到图片区；浏览器的返回键也能关。
+ * 大图平时是隐藏的，浏览器不会提前下载，点开才加载。
+ */
+function Lightbox({ id, photo, alt }: { id: string; photo: ShopPhoto; alt: string }) {
+  return (
+    <a
+      id={id}
+      href={`#${GALLERY_ID}`}
+      aria-label="Close photo"
+      className="fixed inset-0 z-50 hidden cursor-zoom-out items-center justify-center bg-black/90 p-4 target:flex"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element -- 限时签名链接，不经过 next/image 的域名白名单 */}
+      <img src={photo.full} alt={alt} loading="lazy" className="max-h-full max-w-full rounded-lg object-contain" />
+    </a>
+  );
+}
+
+function Gallery({ product }: { product: ShopProduct }) {
+  if (product.photos.length === 0) {
+    return <Photo src={undefined} alt={product.name} className="aspect-square w-full rounded-2xl" />;
+  }
+  const columns = GALLERY_COLUMNS[Math.min(product.photos.length, GALLERY_COLUMNS.length) - 1];
+  return (
+    <div id={GALLERY_ID} className={`grid scroll-mt-20 content-start gap-2 ${columns}`}>
+      {product.photos.map((photo, index) => {
+        const alt = `${product.name} photo ${index + 1}`;
+        return (
+          <div key={photo.thumb}>
+            <a href={`#photo-${index + 1}`} aria-label={`Open ${alt}`} className="block cursor-zoom-in">
+              <Photo src={photo.thumb} alt={alt} className="aspect-square w-full rounded-xl transition hover:opacity-90" />
+            </a>
+            <Lightbox id={`photo-${index + 1}`} photo={photo} alt={alt} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function ProductDetail({ slug, shop, product, category }: { slug: string; shop: Shop; product: ShopProduct; category: string | undefined }) {
-  const gallery: (string | undefined)[] = product.photos.length > 0 ? product.photos : [undefined];
   return (
     <article className="grid gap-8 md:grid-cols-2">
-      <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto">
-        {gallery.map((src, index) => (
-          <Photo key={src ?? index} src={src} alt={`${product.name} photo ${index + 1}`} className="aspect-square w-full shrink-0 snap-center rounded-2xl" />
-        ))}
-      </div>
+      <Gallery product={product} />
       <div>
         <Link href={shopHref(slug, { c: category })} className="text-sm text-neutral-500 hover:text-neutral-900">
           ← Back to products

@@ -1,5 +1,6 @@
 "use client";
 
+import { paraFormatoAceito } from "@/lib/imagens/para-jpeg";
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -99,7 +100,8 @@ function FotosDoProduto({ produto, urls }: { produto: Produto; urls: Record<stri
     setOcupado(true);
     try {
       const form = new FormData();
-      form.append("file", arquivo);
+      // WebP 等格式先在浏览器里转成 JPG：系统只存 JPG/PNG（WhatsApp 不把 WebP 当照片）。
+      form.append("file", await paraFormatoAceito(arquivo));
       const res = await fetch(`/api/v1/products/${produto.id}/fotos`, { method: "POST", body: form });
       if (!res.ok) {
         const json = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
@@ -192,7 +194,7 @@ function FotosDoProduto({ produto, urls }: { produto: Produto; urls: Record<stri
       <input
         ref={entradaRef}
         type="file"
-        accept="image/jpeg,image/png"
+        accept="image/*"
         className="hidden"
         data-testid="arquivo-foto"
         onChange={(e) => {
@@ -211,7 +213,7 @@ function FotosDoProduto({ produto, urls }: { produto: Produto; urls: Record<stri
           {t(ocupado ? "Salvando…" : "Adicionar foto")}
         </Button>
         <span className="text-xs text-muted-foreground">
-          {t("JPG ou PNG, até 5 MB. No máximo 5 fotos.")}
+          {t("JPG, PNG ou WebP, até 5 MB. No máximo 5 fotos. WebP é convertido para JPG.")}
         </span>
       </div>
     </div>
