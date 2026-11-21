@@ -27,8 +27,10 @@ const respostaSchema = z.object({ translations: z.array(z.string()) });
 const REGRAS = [
   "You are a translation engine for a WhatsApp sales chat. Translate every numbered item.",
   "Keep the tone natural and conversational, the way a real person texts.",
-  "Copy these verbatim, never translate them: URLs, emoji, numbers, prices, product codes,",
+  "Copy these verbatim, never translate them: URLs, emoji, product codes,",
   "placeholders in double braces like {{primeiro_nome}}, and anything inside [square brackets].",
+  "Keep every number exactly as written, but do translate the words around it, currency names included.",
+  "A placeholder is a name: put it where a name naturally goes in the target language.",
   "If an item is already in the target language, return it unchanged.",
   'Answer with JSON only: {"translations": ["...", "..."]} — same count and order as the input.',
 ].join("\n");
