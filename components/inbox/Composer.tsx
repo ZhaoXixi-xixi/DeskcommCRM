@@ -15,8 +15,10 @@ import { Button } from "@/components/ui/button";
 import { AttachMenu } from "@/components/inbox/composer/AttachMenu";
 import { AttachmentPreviewDialog } from "@/components/inbox/composer/AttachmentPreviewDialog";
 import { ContactPickerDialog } from "@/components/inbox/composer/ContactPickerDialog";
+import { ProductPickerDialog } from "@/components/inbox/composer/ProductPickerDialog";
 import { AudioRecorder } from "@/components/inbox/composer/AudioRecorder";
 import { ReplyReviewPanel } from "@/components/inbox/composer/ReplyReviewPanel";
+import { BotaoTraduzir } from "@/components/inbox/composer/BotaoTraduzir";
 import { DraftReplyButton } from "@/components/inbox/composer/DraftReplyButton";
 import { EmojiButton } from "@/components/inbox/composer/EmojiButton";
 import { anexoLevaLegenda, indiceDaLegenda } from "@/components/inbox/media/legenda-do-anexo";
@@ -32,6 +34,7 @@ import { useCreateNote } from "@/hooks/inbox/useCreateNote";
 import { useGruposDeRespostas, useMessageTemplates } from "@/hooks/inbox/useMessageTemplates";
 import { X } from "lucide-react";
 import { toast } from "sonner";
+import type { ProdutoParaEnvio } from "@/hooks/inbox/useProdutosDaLoja";
 import { useSendMessage } from "@/hooks/inbox/useSendMessage";
 import { useUploadMedia, type DestinoDoUpload } from "@/hooks/inbox/useUploadMedia";
 import { useRascunhoAssistido } from "@/hooks/inbox/useRascunhoAssistido";
@@ -266,6 +269,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
    */
   const [pendingEm, setPendingEm] = useState<"reply" | "note">("reply");
   const [contactPickerOpen, setContactPickerOpen] = useState(false);
+  const [productPickerOpen, setProductPickerOpen] = useState(false);
   const [agendaAberta, setAgendaAberta] = useState(false);
   const [menuDismissed, setMenuDismissed] = useState(false);
   const [mode, setMode] = useState<"reply" | "note">(initialMode);
@@ -454,6 +458,17 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
     setPendingFiles(files);
     setLegendaInicial(null);
     setPendingEm(mode);
+  }
+
+  /**
+   * 加号菜单选好的产品。有图：图进附件预览框，文字是图片说明，和带图的快捷回复
+   * 走同一条路；没图：文字直接进输入框。两种情况都是人看过再点发送。
+   */
+  function anexarProduto({ foto, texto }: ProdutoParaEnvio) {
+    if (!foto) return escreverNoCampo(texto);
+    setPendingEm("reply");
+    setPendingFiles([foto]);
+    setLegendaInicial(texto);
   }
 
   /** A escolha de UM arquivo — a imagem colada chama por aqui. O menu "+"
@@ -1273,6 +1288,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
             disabled={respostaBarrada}
             onPick={escolherArquivos}
             onPickContact={mode === "reply" ? () => setContactPickerOpen(true) : undefined}
+            onPickProduct={mode === "reply" ? () => setProductPickerOpen(true) : undefined}
             onAgendar={agendamentoLigado && mode === "reply" ? () => setAgendaAberta(true) : undefined}
           />
           <EmojiButton
@@ -1319,6 +1335,14 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
               onDraft={() => {
                 void invalidar();
               }}
+            />
+          )}
+          {mode === "reply" && (
+            <BotaoTraduzir
+              conversationId={conversationId}
+              texto={text}
+              disabled={isDisabled}
+              onTraduzido={(traducao) => escreverNoCampo(traducao)}
             />
           )}
           <textarea
@@ -1457,6 +1481,7 @@ export const Composer = forwardRef<ComposerHandle, Props>(function Composer(
           enviarAnexos(caption);
         }}
       />
+      <ProductPickerDialog open={productPickerOpen} onOpenChange={setProductPickerOpen} onPick={anexarProduto} />
       <ContactPickerDialog
         open={contactPickerOpen}
         onOpenChange={setContactPickerOpen}

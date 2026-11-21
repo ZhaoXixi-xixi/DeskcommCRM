@@ -44,6 +44,7 @@ import { marcadorDaApagada, textoDaApagadaApareceNaInbox } from "@/lib/messaging
 import { TextoRetidoDaMensagem } from "@/components/inbox/TextoRetidoDaMensagem";
 import { AnuncioCard } from "@/components/inbox/AnuncioCard";
 import { TextoComLinks } from "@/components/inbox/TextoComLinks";
+import { TraducaoDoTexto } from "@/components/inbox/traducao/TraducaoDoTexto";
 import {
   extractCitations,
   isAiGeneratedMessage,
@@ -826,6 +827,9 @@ export function MessageBubble({
 
             {message.body && !isContact && !localizacao && (
               <p className="whitespace-pre-wrap wrap-anywhere leading-snug"><TextoComLinks texto={corpo} /></p>
+            )}
+            {message.body && !isContact && !localizacao && (
+              <TraducaoDoTexto conversationId={message.conversation_id} texto={message.body} />
             )}
 
             {botoesDoModelo.length > 0 && (

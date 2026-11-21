@@ -7,13 +7,17 @@ import { createAdminClient } from "@/lib/supabase/admin";
  * 公开产品展示页（/shop/<组织 slug>）的数据层。
  *
  * 展示页不登录，所以这里用 service role 读库、绕过 RLS —— 因此只取可以公开的列：
- * 成本价、库存、内部编码一律不出现在 select 里。图片桶是私有的，这里签发限时链接。
+ * 成本价、库存一律不出现在 select 里。图片桶是私有的，这里签发限时链接。
+ *
+ * 产品编码（codigo）是公开的：它是产品页链接 ?p=<编码> 的一部分，AI 查产品库
+ * 拿到的也是它，这样 AI 和客服发出去的链接都能直接打开对应的产品。
  */
 
 // ------------------------------------------------------------------ 类型
 
 export interface ShopProduct {
   id: string;
+  code: string;
   name: string;
   description: string | null;
   brand: string | null;
@@ -24,6 +28,7 @@ export interface ShopProduct {
 }
 
 export interface Shop {
+  slug: string;
   name: string;
   whatsapp: string | null;
   categories: string[];
@@ -32,6 +37,7 @@ export interface Shop {
 
 interface ProductRow {
   id: string;
+  codigo: string;
   nome: string;
   descricao: string | null;
   marca: string | null;
@@ -47,7 +53,7 @@ interface ProductRow {
 export const UNCATEGORIZED = "Other";
 const PHOTO_TTL_SECONDS = 24 * 60 * 60;
 const MAX_PRODUCTS = 500;
-const PUBLIC_COLUMNS = "id, nome, descricao, marca, categoria, preco_cents, moeda, fotos, imagem_url";
+const PUBLIC_COLUMNS = "id, codigo, nome, descricao, marca, categoria, preco_cents, moeda, fotos, imagem_url";
 
 // ------------------------------------------------------------------ 读取
 
@@ -67,6 +73,7 @@ function toProduct(row: ProductRow, own: string[], signed: Map<string, string>, 
   const uploaded = own.map((path) => signed.get(path)).filter((url): url is string => !!url);
   return {
     id: row.id,
+    code: row.codigo,
     name: row.nome,
     description: row.descricao,
     brand: row.marca,
@@ -90,13 +97,26 @@ async function connectedWhatsapp(admin: Admin, orgId: string): Promise<string | 
   return (data?.phone_number as string | undefined)?.replace(/\D/g, "") || null;
 }
 
-export async function loadShop(slug: string): Promise<Shop | null> {
-  const admin = createAdminClient();
-  const { data: org } = await admin
-    .from("organizations")
-    .select("id, display_name, currency")
-    .eq("slug", slug)
+/** 展示页按 slug 找店；后台（发产品）按登录人的组织 id 找同一家店。 */
+export type ShopKey = { slug: string } | { id: string };
+
+/** 这个产品自己上传的第一张图在图片桶里的路径；没有上传过图就是 null。 */
+export async function firstPhotoPath(orgId: string, productId: string): Promise<string | null> {
+  const { data } = await createAdminClient()
+    .from("catalog_products")
+    .select("fotos")
+    .eq("organization_id", orgId)
+    .eq("id", productId)
+    .eq("ativo", true)
     .maybeSingle();
+  const paths = ((data as { fotos: string[] | null } | null)?.fotos ?? []) as string[];
+  return paths.find((path) => fotoPertenceAoProduto(path, orgId, productId)) ?? null;
+}
+
+export async function loadShop(key: ShopKey): Promise<Shop | null> {
+  const admin = createAdminClient();
+  const orgs = admin.from("organizations").select("id, slug, display_name, currency");
+  const { data: org } = await ("slug" in key ? orgs.eq("slug", key.slug) : orgs.eq("id", key.id)).maybeSingle();
   if (!org) return null;
 
   const [{ data: rows }, whatsapp] = await Promise.all([
@@ -119,6 +139,7 @@ export async function loadShop(slug: string): Promise<Shop | null> {
   const products = list.map((row) => toProduct(row, ownPhotos.get(row.id) ?? [], signed, org.currency ?? "USD"));
 
   return {
+    slug: org.slug,
     name: org.display_name,
     whatsapp,
     categories: [...new Set(products.map((product) => product.category))],

@@ -123,6 +123,8 @@ export {
   LockOpen,
   Receipt,
   Tag,
+  Translate,
+  Package,
   Question,
   Keyboard,
   // followup flow builder (Task 6.2)

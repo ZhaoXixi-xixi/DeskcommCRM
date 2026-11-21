@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { priceLabel } from "@/lib/shop/product-message";
 import { loadShop, type Shop, type ShopProduct } from "@/lib/shop/storefront";
 
 /**
@@ -17,17 +18,14 @@ type Params = Promise<{ slug: string }>;
 type Query = Promise<{ c?: string; p?: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
-  const shop = await loadShop((await params).slug);
+  const shop = await loadShop({ slug: (await params).slug });
   return { title: { absolute: shop ? `${shop.name} — Products` : "Products" }, robots: { index: false } };
 }
 
 // ------------------------------------------------------------------ 小工具
 
 function formatPrice(product: ShopProduct): string {
-  if (product.priceCents === null) return "Ask for price";
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: product.currency }).format(
-    product.priceCents / 100,
-  );
+  return priceLabel(product) ?? "Ask for price";
 }
 
 function whatsappLink(phone: string, text: string): string {
@@ -101,7 +99,7 @@ function CategoryChips({ slug, shop, active }: { slug: string; shop: Shop; activ
 
 function ProductCard({ slug, product, category }: { slug: string; product: ShopProduct; category: string | undefined }) {
   return (
-    <Link href={shopHref(slug, { c: category, p: product.id })} className="group block">
+    <Link href={shopHref(slug, { c: category, p: product.code })} className="group block">
       <Photo src={product.photos[0]} alt={product.name} className="aspect-square w-full rounded-2xl transition group-hover:opacity-90" />
       <h2 className="mt-3 line-clamp-2 text-sm font-medium text-neutral-900">{product.name}</h2>
       <p className="mt-1 text-sm font-semibold text-neutral-900">{formatPrice(product)}</p>
@@ -152,10 +150,11 @@ function ProductDetail({ slug, shop, product, category }: { slug: string; shop: 
 export default async function ShopPage({ params, searchParams }: { params: Params; searchParams: Query }) {
   const { slug } = await params;
   const { c: category, p: productId } = await searchParams;
-  const shop = await loadShop(slug);
+  const shop = await loadShop({ slug });
   if (!shop) notFound();
 
-  const selected = shop.products.find((product) => product.id === productId);
+  // ?p= 认产品编码，也认内部 id：AI 和客服发的链接用编码，旧链接用 id。
+  const selected = shop.products.find((product) => product.code === productId || product.id === productId);
   const visible = category ? shop.products.filter((product) => product.category === category) : shop.products;
 
   return (

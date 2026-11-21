@@ -5,7 +5,7 @@ import { useT } from "@/hooks/i18n/useT";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CalendarDots, FileText, ImageSquare, Plus, UserCircle } from "@/lib/ui/icons";
+import { CalendarDots, FileText, ImageSquare, Package, Plus, UserCircle } from "@/lib/ui/icons";
 
 interface Props {
   disabled?: boolean;
@@ -19,6 +19,8 @@ interface Props {
    */
   onPick: (files: File[]) => void;
   onPickContact?: () => void;
+  /** 打开产品选择框，从产品库里挑一个发给客户。只在回复客户时出现，内部备注里没有。 */
+  onPickProduct?: () => void;
   /**
    * Abre as mensagens agendadas (#4131). O item aparece em qualquer largura:
    * é a porta garantida. O botão de calendário ao lado do Enviar só aparece
@@ -30,7 +32,7 @@ interface Props {
 }
 
 /** Menu "+" do composer (padrão WhatsApp): Fotos e vídeos / Documento / Contato. */
-export function AttachMenu({ disabled, onPick, onPickContact, onAgendar }: Props) {
+export function AttachMenu({ disabled, onPick, onPickContact, onPickProduct, onAgendar }: Props) {
   const t = useT();
   const mediaRef = useRef<HTMLInputElement | null>(null);
   const docRef = useRef<HTMLInputElement | null>(null);
@@ -94,6 +96,16 @@ export function AttachMenu({ disabled, onPick, onPickContact, onAgendar }: Props
               >
                 <UserCircle size={18} weight="duotone" className="text-primary" aria-hidden />
                 {t("Contato")}
+              </button>
+            )}
+            {onPickProduct && (
+              <button
+                type="button"
+                className="flex min-h-11 w-full items-center gap-2 rounded-md px-2 py-2 text-sm hover:bg-muted lg:min-h-0"
+                onClick={onPickProduct}
+              >
+                <Package size={18} weight="duotone" className="text-primary" aria-hidden />
+                {t("Produto")}
               </button>
             )}
             {onAgendar && (

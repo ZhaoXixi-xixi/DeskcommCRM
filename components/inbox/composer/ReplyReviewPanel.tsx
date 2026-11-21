@@ -8,6 +8,7 @@ import { showApiError } from "@/components/feedback/ApiErrorToast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { TraducaoDoTexto } from "@/components/inbox/traducao/TraducaoDoTexto";
 import { useT } from "@/hooks/i18n/useT";
 import { chaveDosRascunhos, useRascunhoAssistido } from "@/hooks/inbox/useRascunhoAssistido";
 import { motivoDoVeto } from "@/lib/agent-engine/agent/sugestao-de-resposta";
@@ -146,6 +147,7 @@ export function ReplyReviewPanel({
               rows={3}
             />
           )}
+          {body && <TraducaoDoTexto conversationId={conversationId} texto={body} className="mt-0 border-t-0 pt-0 text-sm" />}
           {draft.proposals.length > 0 && (
             <details className="text-xs">
               <summary>{t("Ações propostas: precisam de autorização separada")}</summary>

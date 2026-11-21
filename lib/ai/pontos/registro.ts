@@ -294,6 +294,18 @@ export const PONTOS_DE_IA: readonly PontoDeIa[] = [
     registraEm: "llm_calls",
   },
   {
+    id: "chat_translation",
+    rotulo: "Traduzir a conversa",
+    oQueFaz:
+      "Traduz as mensagens do cliente para o idioma de quem atende e a resposta do atendente para o idioma do cliente, para os dois conversarem sem falar a mesma língua.",
+    papel: "atender",
+    exige: {},
+    emissor: "lib/inbox/traducao/traduzir.ts",
+    sintomaDeFalha:
+      "As mensagens aparecem sem a tradução embaixo e o botão de traduzir a resposta mostra um erro; a conversa continua funcionando no idioma original.",
+    registraEm: "llm_calls",
+  },
+  {
     id: "draft_suggestion",
     rotulo: "Sugerir resposta ao atendente",
     oQueFaz:
