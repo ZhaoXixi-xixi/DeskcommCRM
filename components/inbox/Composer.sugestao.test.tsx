@@ -23,6 +23,7 @@
  * `DraftReplyButton` são os REAIS — só a borda de rede (`apiClient`) e os filhos
  * irrelevantes do compositor são placeholders.
  */
+import { DRAFT_REPLY_TIMEOUT_MS } from "@/hooks/inbox/useDraftReply";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -223,7 +224,10 @@ describe("a faixa da assistência só existe com rascunho (issue #3027)", () => 
     await userEvent.click(icone);
 
     await waitFor(() =>
-      expect(deps.post).toHaveBeenCalledWith("/api/v1/conversations/conv-1/draft-reply", {}),
+      // 第三个参数是等待时间：起草要等模型，按钮等 2 分钟而不是默认的 30 秒。
+      expect(deps.post).toHaveBeenCalledWith("/api/v1/conversations/conv-1/draft-reply", {}, {
+        timeoutMs: DRAFT_REPLY_TIMEOUT_MS,
+      }),
     );
     expect(await screen.findByText("Sugestão para revisar")).toBeTruthy();
     expect(screen.getByLabelText("Resposta sugerida")).toHaveValue("Sugestão do agente");
