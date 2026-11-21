@@ -46,7 +46,9 @@ export function normalizar(texto: string): string {
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .toLowerCase()
-    .replace(/[^a-z0-9\s]/g, " ")
+    // 保留所有文字和数字（\p{L}\p{N}），不只是 a-z：原来的 [^a-z0-9] 会把中文、
+    // 日文、俄文的产品名整段删空，用这些文字登记的产品永远搜不到。
+    .replace(/[^\p{L}\p{N}\s]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
