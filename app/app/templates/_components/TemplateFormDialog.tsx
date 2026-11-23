@@ -30,6 +30,7 @@ import { apiClient } from "@/lib/api/client";
 import { showApiError } from "@/components/feedback/ApiErrorToast";
 import type { GrupoDeRespostas, MessageTemplate } from "@/hooks/inbox/useMessageTemplates";
 import { lerRespostaRapida } from "@/lib/inbox/resposta-rapida";
+import { paraFormatoAceito } from "@/lib/imagens/para-jpeg";
 import { useUploadTemplateMedia } from "@/hooks/templates/useUploadTemplateMedia";
 import {
   MAXIMO_DE_MIDIAS,
@@ -219,22 +220,22 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template, gru
     return `/api/v1/message-templates/${template?.id}/midias/${indice}`;
   }
 
-  function escolherArquivos(lista: FileList | null) {
-    if (!lista) return;
-    const aceitas: File[] = [];
-    for (const file of Array.from(lista)) {
-      // A MESMA régua da rota (que confere pela ASSINATURA dos bytes): aqui é
-      // só o aviso honesto antes do upload, não a autorização.
-      if (!/^image\/(jpeg|png)$/.test(file.type)) {
-        toast.error(t("A imagem precisa ser JPG ou PNG."));
-        continue;
-      }
-      if (file.size > TAMANHO_MAXIMO_DA_MIDIA) {
-        toast.error(t("A imagem precisa ter até 5 MB."));
-        continue;
-      }
-      aceitas.push(file);
-    }
+  /**
+   * JPG e PNG passam como vieram; WebP e afins viram JPG antes de subir (o
+   * WhatsApp trata WebP como figurinha). Devolve o arquivo pronto ou o aviso.
+   */
+  async function prepararImagem(file: File): Promise<File | string> {
+    const pronta = await paraFormatoAceito(file).catch(() => null);
+    if (!pronta) return t("Não deu para abrir essa imagem. Use JPG, PNG ou WebP.");
+    return pronta.size > TAMANHO_MAXIMO_DA_MIDIA ? t("A imagem precisa ter até 5 MB.") : pronta;
+  }
+
+  async function escolherArquivos(lista: FileList | null) {
+    // A cópia vem ANTES de qualquer espera: o input é limpo logo depois do
+    // `change`, e a FileList viva esvazia junto.
+    const prontas = await Promise.all(Array.from(lista ?? []).map(prepararImagem));
+    for (const aviso of prontas) if (typeof aviso === "string") toast.error(aviso);
+    const aceitas = prontas.filter((pronta): pronta is File => pronta instanceof File);
     if (aceitas.length) setNovas((atual) => [...atual, ...aceitas]);
   }
 
@@ -433,7 +434,7 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template, gru
           <div className="space-y-2">
             <Label htmlFor="tpl-midias">{t("Imagens (opcional)")}</Label>
             <p className="text-xs text-muted-foreground">
-              {t("JPG ou PNG, até 5 MB por imagem. A imagem vai junto com o texto.")}
+              {t("JPG, PNG ou WebP, até 5 MB por imagem. WebP é convertido para JPG. A imagem vai junto com o texto.")}
             </p>
             {(mantidas.length > 0 || novas.length > 0) && (
               <ul className="flex flex-wrap gap-2">
@@ -477,11 +478,11 @@ export function TemplateFormDialog({ open, onOpenChange, canShare, template, gru
               <Input
                 id="tpl-midias"
                 type="file"
-                accept="image/jpeg,image/png"
+                accept="image/*"
                 multiple
                 className="sr-only"
                 onChange={(e) => {
-                  escolherArquivos(e.target.files);
+                  void escolherArquivos(e.target.files);
                   // Sem isto, escolher o MESMO arquivo duas vezes seguidas não
                   // disparava `change` — e a segunda escolha some em silêncio.
                   e.target.value = "";

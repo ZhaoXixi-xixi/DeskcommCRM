@@ -15088,5 +15088,7 @@
   "Escolha um produto. Você revisa a foto e o texto antes de enviar.": "选一个产品。发送前可以先检查图片和文字。",
   "Loja não encontrada.": "找不到店铺。",
   "Produto": "产品",
-  "JPG, PNG ou WebP, até 5 MB. No máximo 6 fotos. WebP é convertido para JPG.": "支持 JPG、PNG、WebP，每张不超过 5 MB，最多 6 张。WebP 会自动转成 JPG。"
+  "JPG, PNG ou WebP, até 5 MB. No máximo 6 fotos. WebP é convertido para JPG.": "支持 JPG、PNG、WebP，每张不超过 5 MB，最多 6 张。WebP 会自动转成 JPG。",
+  "JPG, PNG ou WebP, até 5 MB por imagem. WebP é convertido para JPG. A imagem vai junto com o texto.": "支持 JPG、PNG、WebP，每张不超过 5 MB。WebP 会自动转成 JPG。图片会随文字一起发送。",
+  "Não deu para abrir essa imagem. Use JPG, PNG ou WebP.": "这张图片打不开，请换一张 JPG、PNG 或 WebP。"
 }
