@@ -163,15 +163,15 @@ describe("#3587 — fotos por URL na API de produto", () => {
     expect(json.data?.fotos).toEqual(caminhos);
   });
 
-  it("POST recusa o corpo inteiro com mais de 5 fotos", async () => {
-    const seis = Array.from({ length: 6 }, (_, i) => `https://cdn.loja.test/carro/${i + 1}.jpg`);
+  it("POST recusa o corpo inteiro com mais de 6 fotos", async () => {
+    const sete = Array.from({ length: 7 }, (_, i) => `https://cdn.loja.test/carro/${i + 1}.jpg`);
 
-    const resposta = await POST(corpo({ ...produtoNovo, fotos: seis }));
+    const resposta = await POST(corpo({ ...produtoNovo, fotos: sete }));
     const json = (await resposta.json()) as { error: { code: string; details?: { fotos?: string[] } } };
 
     expect(resposta.status).toBe(422);
     expect(json.error.code).toBe("validation_failed");
-    expect((json.error.details?.fotos ?? []).join(" ")).toContain("5");
+    expect((json.error.details?.fotos ?? []).join(" ")).toContain("6");
     // Nada é baixado e nada é gravado: a recusa é do corpo, não de uma foto.
     expect(guardarFotosPorUrl).not.toHaveBeenCalled();
     expect(insercoes).toHaveLength(0);

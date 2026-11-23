@@ -52,15 +52,15 @@ describe("lerPlanilha — coluna de foto por URL", () => {
     expect(produtos[0]!.fotos).toEqual([URL_A]);
   });
 
-  it("mais de 5 fotos recusa a linha em vez de descartar link em silêncio", () => {
-    const urls = Array.from({ length: 6 }, (_, i) => `https://cdn.revenda.com.br/c/f${i + 1}.jpg`);
+  it("mais de 6 fotos recusa a linha em vez de descartar link em silêncio", () => {
+    const urls = Array.from({ length: 7 }, (_, i) => `https://cdn.revenda.com.br/c/f${i + 1}.jpg`);
     const { produtos, erros } = ler(`codigo,nome,preco,foto\nIP15,iPhone 15,5499,${urls.join("|")}\n`);
 
     expect(produtos).toEqual([]);
     expect(erros).toHaveLength(1);
     expect(erros[0]!.linha).toBe(2);
     expect(erros[0]!.motivo).toBe(
-      "a linha traz 6 fotos — o produto aceita até 5. Deixe as 5 primeiras na coluna.",
+      "a linha traz 7 fotos — o produto aceita até 6. Deixe as 6 primeiras na coluna.",
     );
   });
 

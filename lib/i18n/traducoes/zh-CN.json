@@ -7961,12 +7961,12 @@
   "Mover a foto para a direita": "将照片右移",
   "Remover a foto": "移除照片",
   "Adicionar foto": "添加照片",
-  "JPG ou PNG, até 5 MB. No máximo 5 fotos.": "JPG 或 PNG，最大 5 MB。最多 5 张照片。",
+  "JPG ou PNG, até 5 MB. No máximo 6 fotos.": "JPG 或 PNG，最大 5 MB。最多 6 张照片。",
   "Foto adicionada": "照片已添加",
   "Não consegui enviar a foto.": "无法上传照片。",
   "Ordem das fotos salva": "照片顺序已保存",
   "Foto removida": "照片已移除",
-  "Cada produto tem no máximo 5 fotos.": "每个产品最多可有 5 张照片。",
+  "Cada produto tem no máximo 6 fotos.": "每个产品最多可有 6 张照片。",
   "A foto precisa ter até 5 MB.": "照片大小不得超过 5 MB。",
   "A foto precisa ser JPG ou PNG.": "照片必须为 JPG 或 PNG。",
   "As fotos mudaram. Recarregue a página.": "照片已变更。请刷新页面。",
@@ -12421,7 +12421,7 @@
   "Na Stripe: Desenvolvedores › Chaves de API. Comece pela chave de teste; troque pela de produção quando a compra de teste der certo.": "在 Stripe 中：开发者 › API 密钥。先从测试密钥开始；测试购买成功后换成生产密钥。",
   "Na aba Conexão, cole a chave secreta de teste e clique em Testar e conectar.": "在“连接”标签页中，粘贴测试密钥并点击“测试并连接”。",
   "Na aba Planos, crie o plano que as empresas vão assinar e clique em Usar no cadastro. Sem ele, quem se cadastra não ganha teste grátis nem tem o que assinar.": "在“套餐”标签页中，创建企业将要订阅的套餐，然后点击“在注册中使用”。没有它，注册者既无法获得免费试用，也没有可订阅的套餐。",
-  "Na coluna foto, cole o link da imagem (JPG ou PNG, até 5 MB). Para até 5 fotos, separe os links com | — a primeira é a capa.": "在照片列中，粘贴图片链接（JPG 或 PNG，最大 5 MB）。最多 5 张照片，用 | 分隔链接——第一张是封面。",
+  "Na coluna foto, cole o link da imagem (JPG ou PNG, até 5 MB). Para até 6 fotos, separe os links com | — a primeira é a capa.": "在照片列中，粘贴图片链接（JPG 或 PNG，最大 5 MB）。最多 6 张照片，用 | 分隔链接——第一张是封面。",
   "Na fila de envio": "在发送队列中",
   "Na primeira ligação pelo CRM, o navegador pergunta se pode usar o microfone. Clique em Permitir.": "首次通过 CRM 拨打电话时，浏览器会询问是否可以使用麦克风。点击“允许”。",
   "Na primeira mensagem (recomendado)": "在首条消息中（推荐）",
@@ -15088,5 +15088,5 @@
   "Escolha um produto. Você revisa a foto e o texto antes de enviar.": "选一个产品。发送前可以先检查图片和文字。",
   "Loja não encontrada.": "找不到店铺。",
   "Produto": "产品",
-  "JPG, PNG ou WebP, até 5 MB. No máximo 5 fotos. WebP é convertido para JPG.": "支持 JPG、PNG、WebP，每张不超过 5 MB，最多 5 张。WebP 会自动转成 JPG。"
+  "JPG, PNG ou WebP, até 5 MB. No máximo 6 fotos. WebP é convertido para JPG.": "支持 JPG、PNG、WebP，每张不超过 5 MB，最多 6 张。WebP 会自动转成 JPG。"
 }

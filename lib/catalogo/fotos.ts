@@ -9,8 +9,11 @@
 
 export const BUCKET_DAS_FOTOS = "catalog-photos";
 
-/** O mesmo `cardinality(fotos) <= 5` do CHECK da 0390. */
-export const MAXIMO_DE_FOTOS = 5;
+/**
+ * O mesmo `cardinality(fotos) <= 6` do CHECK (0390, ampliado na 9433).
+ * 6 = 展示页一排 3 张，正好两排。
+ */
+export const MAXIMO_DE_FOTOS = 6;
 
 /** 5 MB: o `file_size_limit` do bucket, e o teto de imagem do WhatsApp oficial. */
 export const TAMANHO_MAXIMO_DA_FOTO = 5 * 1024 * 1024;

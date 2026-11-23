@@ -83489,6 +83489,14 @@ alter table public.catalog_products
   drop constraint if exists catalog_products_fotos_no_maximo_5;
 alter table public.catalog_products
   add constraint catalog_products_fotos_no_maximo_5 check (cardinality(fotos) <= 5);
+
+-- 9433: o teto sobe para 6 e o nome deixa de carregar o número.
+alter table public.catalog_products
+  drop constraint if exists catalog_products_fotos_no_maximo_5;
+alter table public.catalog_products
+  drop constraint if exists catalog_products_fotos_no_maximo;
+alter table public.catalog_products
+  add constraint catalog_products_fotos_no_maximo check (cardinality(fotos) <= 6);
 comment on column public.catalog_products.fotos is
   'Caminhos em storage/catalog-photos, sempre <organization_id>/<id>/<uuid>.<jpg|png>. A ordem é a da tela e a primeira é a capa. Escrito só por app/api/v1/products/[id]/fotos.';
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)

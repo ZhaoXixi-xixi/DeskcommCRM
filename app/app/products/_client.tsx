@@ -213,7 +213,7 @@ function FotosDoProduto({ produto, urls }: { produto: Produto; urls: Record<stri
           {t(ocupado ? "Salvando…" : "Adicionar foto")}
         </Button>
         <span className="text-xs text-muted-foreground">
-          {t("JPG, PNG ou WebP, até 5 MB. No máximo 5 fotos. WebP é convertido para JPG.")}
+          {t("JPG, PNG ou WebP, até 5 MB. No máximo 6 fotos. WebP é convertido para JPG.")}
         </span>
       </div>
     </div>
@@ -411,7 +411,7 @@ export function ProdutosClient({
           </a>
           <p className="mt-1 break-words text-xs text-muted-foreground" data-testid="formato-da-foto">
             {t(
-              "Na coluna foto, cole o link da imagem (JPG ou PNG, até 5 MB). Para até 5 fotos, separe os links com | — a primeira é a capa.",
+              "Na coluna foto, cole o link da imagem (JPG ou PNG, até 5 MB). Para até 6 fotos, separe os links com | — a primeira é a capa.",
             )}
           </p>
         </div>

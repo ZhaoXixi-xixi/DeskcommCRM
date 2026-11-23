@@ -46,16 +46,16 @@ describe("catalog_products.fotos — no máximo o que a tela deixa pôr", () => 
           values ('${ORG}', 'fotos-0390', 'Fotos 0390', 'Fotos 0390') on conflict (id) do nothing;
         delete from public.catalog_products where organization_id = '${ORG}';
         insert into public.catalog_products (organization_id, codigo, nome, preco_cents, fotos)
-          values ('${ORG}', 'CINCO', 'Cinco fotos', 100, ${caminhos(MAXIMO_DE_FOTOS)});
+          values ('${ORG}', 'CHEIO', 'No limite', 100, ${caminhos(MAXIMO_DE_FOTOS)});
         do $$ begin
           insert into public.catalog_products (organization_id, codigo, nome, preco_cents, fotos)
-            values ('${ORG}', 'SEIS', 'Seis fotos', 100, ${caminhos(MAXIMO_DE_FOTOS + 1)});
+            values ('${ORG}', 'DEMAIS', 'Acima do limite', 100, ${caminhos(MAXIMO_DE_FOTOS + 1)});
         exception when check_violation then null;
         end $$;
         select string_agg(codigo, ',' order by codigo) from public.catalog_products
          where organization_id = '${ORG}';`),
     );
-    expect(resultado).toBe("CINCO");
+    expect(resultado).toBe("CHEIO");
   });
 
   it("produto que já existia nasce com a lista vazia, não nula", () => {

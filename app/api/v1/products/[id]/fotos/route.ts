@@ -78,7 +78,7 @@ export async function POST(
   const atuais = await fotosAtuais(orgId, id);
   if (atuais === null) return fail("not_found", t("Produto não encontrado."), 404, { requestId });
   if (atuais.length >= MAXIMO_DE_FOTOS) {
-    return fail("validation_failed", t("Cada produto tem no máximo 5 fotos."), 422, { requestId });
+    return fail("validation_failed", t("Cada produto tem no máximo 6 fotos."), 422, { requestId });
   }
 
   // O teto vale também para o envio sem tamanho declarado; o file.size abaixo
