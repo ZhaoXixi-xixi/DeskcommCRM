@@ -38,6 +38,31 @@ const LOCALE_DE_DATA: Record<Idioma, Locale> = {
   "zh-CN": zhCN,
 };
 
+/**
+ * Fork 见外 — o PADRÃO de data por idioma. O produto escrevia `dd/MM/yyyy` à mão
+ * em cada tela, e em chinês isso lê como data brasileira. Chinês recebe a forma
+ * ISO (2026-11-19), que é a do ERP da casa; os outros idiomas seguem como antes.
+ */
+export type FormaDaData = "data" | "dataHora" | "diaMes" | "diaMesHora";
+
+const FORMAS_PADRAO: Record<FormaDaData, string> = {
+  data: "dd/MM/yyyy",
+  dataHora: "dd/MM/yyyy HH:mm",
+  diaMes: "dd/MM",
+  diaMesHora: "dd/MM HH:mm",
+};
+
+const FORMAS_CHINES: Record<FormaDaData, string> = {
+  data: "yyyy-MM-dd",
+  dataHora: "yyyy-MM-dd HH:mm",
+  diaMes: "M月d日",
+  diaMesHora: "M月d日 HH:mm",
+};
+
+export function padraoDeData(locale: Locale | undefined, forma: FormaDaData): string {
+  return (locale?.code === "zh-CN" ? FORMAS_CHINES : FORMAS_PADRAO)[forma];
+}
+
 /** O `Locale` do date-fns para quem está lendo. */
 export function localeDeData(idioma: Idioma): Locale {
   return LOCALE_DE_DATA[idioma] ?? LOCALE_DE_DATA[IDIOMA_PADRAO];

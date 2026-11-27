@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoDeData } from "@/lib/i18n/datas";
 import { BotaoMarcarSemInteresse } from "@/components/contacts/BotaoMarcarSemInteresse";
 import { CartaoDaCarteira } from "@/components/contacts/CartaoDaCarteira";
 import { RoteirosDoContato } from "@/components/contacts/RoteirosDoContato";
@@ -327,7 +328,7 @@ function formatMoney(cents: number | null, currency: string | null): string {
 }
 
 function shortDate(iso: string, locale: Locale): string {
-  return format(new Date(iso), "dd/MM/yy HH:mm", { locale: locale });
+  return format(new Date(iso), padraoDeData(locale, "dataHora"), { locale: locale });
 }
 
 /**
@@ -1450,7 +1451,12 @@ export function CRMSidePanel({
                       {t(ESTADO_LEGIVEL[d.estado] ?? d.estado)}
                     </span>
                     <span className="shrink-0 tabular-nums text-muted-foreground">
-                      {t("há {tempo}").replace("{tempo}", `${horasDesde(d.aberta_em)}h`)}
+                      {t("há {tempo}").replace(
+                        "{tempo}",
+                        horasDesde(d.aberta_em) < 48
+                          ? `${horasDesde(d.aberta_em)} ${t("horas")}`
+                          : `${Math.floor(horasDesde(d.aberta_em) / 24)} ${t("dias")}`,
+                      )}
                     </span>
                   </div>
                   {/* O invariante 4 na frase, não só na cor: quem enxerga mal

@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoDeData } from "@/lib/i18n/datas";
 import { format } from "date-fns";
 
 import { AnuncioCard, type AnuncioParaMostrar } from "@/components/inbox/AnuncioCard";
@@ -35,7 +36,7 @@ export function AnuncioDoContato({
   const quando = (iso: string | null) => {
     if (!iso) return null;
     const d = new Date(iso);
-    return Number.isNaN(d.getTime()) ? null : format(d, "dd/MM/yyyy HH:mm", { locale: localeDaData });
+    return Number.isNaN(d.getTime()) ? null : format(d, padraoDeData(localeDaData, "dataHora"), { locale: localeDaData });
   };
   const nomes = [
     [t("Campanha"), hierarquia.data?.campaign_name],

@@ -1,6 +1,8 @@
 import { format, formatDistanceStrict } from "date-fns";
 import type { Locale } from "date-fns";
 
+import { padraoDeData } from "./datas";
+
 /**
  * O "quando" curto de uma linha de conversa: `14:32`, `há 3 dias`, `28/10`.
  *
@@ -41,7 +43,7 @@ export function horaCurta(
   // primeira versão desta função: o caso dizia "3 dias" e a função, rodando à
   // meia-noite, respondia "4 dias").
   if (dias < 7) return formatDistanceStrict(quando, agora, { locale });
-  return format(quando, "dd/MM");
+  return format(quando, padraoDeData(locale, "diaMes"), { locale });
 }
 
 /**
@@ -54,5 +56,5 @@ export function dataEHoraCompletas(iso: string | null | undefined, locale: Local
   if (!iso) return "";
   const quando = new Date(iso);
   if (Number.isNaN(quando.getTime())) return "";
-  return format(quando, "dd/MM/yyyy HH:mm", { locale });
+  return format(quando, padraoDeData(locale, "dataHora"), { locale });
 }

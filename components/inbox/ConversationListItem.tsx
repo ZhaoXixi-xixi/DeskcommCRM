@@ -5,6 +5,23 @@ import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 import type { Locale } from "date-fns";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useT } from "@/hooks/i18n/useT";
+import { ROTULO_DO_TIPO } from "@/lib/messaging/previa-da-mensagem";
+
+/** O rótulo do tipo na língua de quem lê — um `t()` com literal por rótulo, para o dicionário achar cada um. */
+function rotuloDoTipoTraduzido(rotulo: string, t: (texto: string) => string): string | null {
+  switch (rotulo) {
+    case ROTULO_DO_TIPO.image: return t("Imagem");
+    case ROTULO_DO_TIPO.audio: return t("Áudio");
+    case ROTULO_DO_TIPO.video: return t("Vídeo");
+    case ROTULO_DO_TIPO.document: return t("Documento");
+    case ROTULO_DO_TIPO.sticker: return t("Figurinha");
+    case ROTULO_DO_TIPO.location: return t("Localização compartilhada");
+    case ROTULO_DO_TIPO.contact: return t("Contato");
+    case ROTULO_DO_TIPO.reaction: return t("Reação");
+    case ROTULO_DO_TIPO.system: return t("Sistema");
+    default: return null;
+  }
+}
 import { Check, Robot, Sparkle } from "@/lib/ui/icons";
 import { ChannelLogo } from "@/components/inbox/ChannelLogo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -181,7 +198,10 @@ export function ConversationListItem({
   const visibleTags = tags.slice(0, 2);
   const overflow = tags.length - visibleTags.length;
   const hiddenTags = tags.slice(2);
-  const preview = conversation.last_message_preview?.trim() || t("Sem mensagens");
+  // A prévia é gravada no banco com o rótulo do tipo em português (`Imagem`…,
+  // `lib/messaging/previa-da-mensagem.ts`): quando ela É um rótulo, traduz na tela.
+  const previaCrua = conversation.last_message_preview?.trim() ?? "";
+  const preview = previaCrua ? (rotuloDoTipoTraduzido(previaCrua, t) ?? previaCrua) : t("Sem mensagens");
   const truncated = preview.length > 60 ? `${preview.slice(0, 60)}…` : preview;
   const naFila = queuePosition !== undefined;
   /**

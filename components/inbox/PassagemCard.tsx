@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoDeData } from "@/lib/i18n/datas";
 import Link from "next/link";
 import { useId } from "react";
 import { format } from "date-fns";
@@ -67,7 +68,7 @@ export function PassagemCard({ cartao, contatoId, onAssumir, assumindo }: Props)
   const t = useT();
   const localeDaData = useLocaleDeData();
   const tituloId = useId();
-  const hora = format(new Date(cartao.criadoEm), "dd/MM HH:mm", { locale: localeDaData });
+  const hora = format(new Date(cartao.criadoEm), padraoDeData(localeDaData, "diaMesHora"), { locale: localeDaData });
 
   if (cartao.recolhido) {
     return (

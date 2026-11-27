@@ -12,6 +12,7 @@ import { apiClient } from "@/lib/api/client";
 import { queryDaTela } from "@/lib/catalogo/busca-da-tela";
 import { MAXIMO_DE_FOTOS } from "@/lib/catalogo/fotos";
 import { formatCents } from "@/lib/money";
+import { productUrl } from "@/lib/shop/product-message";
 import { precoParaCentavos, type Produto } from "@/lib/schemas/produtos";
 
 import { EdicaoDoProduto } from "./_edicao";
@@ -21,6 +22,33 @@ interface Textos {
   subtitulo: string;
   vazio: string;
   vazioDica: string;
+}
+
+/** Fork 见外 — os números do catálogo inteiro, contados no servidor. */
+export interface ResumoDoCatalogo {
+  noCatalogo: number;
+  aVenda: number;
+  semFoto: number;
+  semDescricao: number;
+  semEstoque: number;
+}
+
+function Bloco({ rotulo, valor, alerta = false, testid }: { rotulo: string; valor: number; alerta?: boolean; testid: string }) {
+  return (
+    <div
+      className={`rounded-xl bg-card p-4 shadow-sm ring-1 ring-border/60 ${alerta && valor > 0 ? "bg-warning-bg" : ""}`}
+      data-testid={testid}
+    >
+      <p className="text-xs text-muted-foreground">{rotulo}</p>
+      <p className={`mt-1 text-2xl font-semibold tabular-nums ${alerta && valor > 0 ? "text-warning-fg" : ""}`}>{valor}</p>
+    </div>
+  );
+}
+
+function Etiqueta({ children, tom }: { children: React.ReactNode; tom: "ok" | "alerta" | "neutro" }) {
+  const cor =
+    tom === "ok" ? "bg-success-bg text-success-fg" : tom === "alerta" ? "bg-warning-bg text-warning-fg" : "bg-muted text-muted-foreground";
+  return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${cor}`}>{children}</span>;
 }
 
 interface ResumoDaImportacao {
@@ -231,6 +259,8 @@ export function ProdutosClient({
   capacidadeLigada = false,
   apresentacaoLigada = false,
   fonteDoFeed = null,
+  resumo: resumoDoCatalogo,
+  slugDaLoja = null,
   textos,
 }: {
   /** A página atual, já filtrada no servidor (ver `lib/catalogo/busca-da-tela.ts`). */
@@ -247,6 +277,10 @@ export function ProdutosClient({
   apresentacaoLigada?: boolean;
   /** A seção do módulo `catalogo_por_feed`; `null` com o módulo desligado. */
   fonteDoFeed?: React.ReactNode;
+  /** Fork 见外 — os blocos do topo; sem ele (testes antigos) os blocos não aparecem. */
+  resumo?: ResumoDoCatalogo;
+  /** O slug da vitrine pública (`/shop/<slug>`), para copiar e abrir o link do produto. */
+  slugDaLoja?: string | null;
   textos: Textos;
 }) {
   const t = useT();
@@ -341,6 +375,22 @@ export function ProdutosClient({
     }
   }
 
+  function linkDoProduto(p: Produto): string | null {
+    if (!slugDaLoja || typeof window === "undefined") return null;
+    return productUrl(window.location.origin, slugDaLoja, p.codigo);
+  }
+
+  async function copiarLink(p: Produto) {
+    const link = linkDoProduto(p);
+    if (!link) return;
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success(t("Link copiado"));
+    } catch {
+      toast.error(link);
+    }
+  }
+
   async function alternarAtivo(p: Produto) {
     try {
       await apiClient.patch(`/api/v1/products/${p.id}`, { ativo: !p.ativo });
@@ -352,11 +402,26 @@ export function ProdutosClient({
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl p-6" data-testid="tela-produtos">
+    <div className="mx-auto w-full max-w-6xl p-6" data-testid="tela-produtos">
       <header className="mb-6">
         <h1 className="text-2xl font-semibold">{textos.titulo}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{textos.subtitulo}</p>
       </header>
+
+      {resumoDoCatalogo ? (
+        <section className="mb-6" data-testid="resumo-do-catalogo">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <Bloco rotulo={t("No catálogo")} valor={resumoDoCatalogo.noCatalogo} testid="bloco-no-catalogo" />
+            <Bloco rotulo={t("À venda")} valor={resumoDoCatalogo.aVenda} testid="bloco-a-venda" />
+            <Bloco rotulo={t("Faltando foto")} valor={resumoDoCatalogo.semFoto} alerta testid="bloco-sem-foto" />
+            <Bloco rotulo={t("Faltando descrição")} valor={resumoDoCatalogo.semDescricao} alerta testid="bloco-sem-descricao" />
+            <Bloco rotulo={t("Estoque zerado")} valor={resumoDoCatalogo.semEstoque} alerta testid="bloco-sem-estoque" />
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            {t("Faltas contadas só entre os produtos à venda: sem foto ou descrição, o atendente de IA tem menos o que mostrar ao cliente.")}
+          </p>
+        </section>
+      ) : null}
 
       {fonteDoFeed}
 
@@ -365,7 +430,7 @@ export function ProdutosClient({
           value={busca}
           onChange={(e) => setBusca(e.target.value)}
           placeholder={t("Buscar por nome, código ou marca")}
-          className="h-9 w-full max-w-sm rounded-md border px-3 text-sm"
+          className="h-9 w-full max-w-sm rounded-md border bg-card px-3 text-sm"
           data-testid="busca-produto"
         />
         {podeEditar ? (
@@ -514,7 +579,7 @@ export function ProdutosClient({
               <input
                 value={rascunho.preco}
                 onChange={(e) => setRascunho({ ...rascunho, preco: e.target.value })}
-                placeholder="5.499,00"
+                placeholder="450.00"
                 className="mt-1 h-9 w-full rounded-md border px-3"
                 data-testid="produto-preco"
               />
@@ -524,7 +589,7 @@ export function ProdutosClient({
               <input
                 value={rascunho.custo}
                 onChange={(e) => setRascunho({ ...rascunho, custo: e.target.value })}
-                placeholder="4.100,00"
+                placeholder="300.00"
                 className="mt-1 h-9 w-full rounded-md border px-3"
               />
               <span className="mt-1 block text-xs text-muted-foreground">
@@ -593,7 +658,7 @@ export function ProdutosClient({
         </div>
       ) : (
         <ul
-          className={`divide-y rounded-lg border ${carregando ? "opacity-60" : ""}`}
+          className={`divide-y overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border/60 ${carregando ? "opacity-60" : ""}`}
           aria-busy={carregando}
           data-testid="lista-produtos"
         >
@@ -614,24 +679,37 @@ export function ProdutosClient({
             >
               {capa ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={capa} alt="" className="h-10 w-10 shrink-0 rounded-md object-cover" />
-              ) : null}
+                <img src={capa} alt="" className="h-12 w-12 shrink-0 rounded-lg object-cover" />
+              ) : (
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-muted text-[11px] text-muted-foreground">
+                  {t("Sem foto")}
+                </div>
+              )}
               <div className="min-w-0 flex-1">
                 <p className={`truncate font-medium ${p.ativo ? "" : "text-muted-foreground line-through"}`}>
                   {p.nome}
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <p className="mt-0.5 text-xs text-muted-foreground">
                   {p.codigo}
                   {p.marca ? ` · ${p.marca}` : ""}
                   {capacidadeLigada && p.capacidade ? ` · ${p.capacidade}` : ""}
                   {p.controla_estoque
                     ? ` · ${p.quantidade} ${t("em estoque")}`
                     : ` · ${t("sem controle de estoque")}`}
-                  {/* Sem descrição, o atendente de IA só sabe nome e preço: a lista diz onde falta. */}
-                  {p.descricao?.trim() ? "" : ` · ${t("sem descrição")}`}
+                </p>
+                {/* Sem foto ou descrição, o atendente de IA só sabe nome e preço: a lista diz onde falta. */}
+                <p className="mt-1 flex flex-wrap gap-1">
+                  {p.ativo ? <Etiqueta tom="ok">{t("À venda")}</Etiqueta> : <Etiqueta tom="neutro">{t("Fora de venda")}</Etiqueta>}
+                  {p.ativo ? (
+                    <>
+                    {!p.fotos?.length ? <Etiqueta tom="alerta">{t("Faltando foto")}</Etiqueta> : null}
+                    {!p.descricao?.trim() ? <Etiqueta tom="alerta">{t("Faltando descrição")}</Etiqueta> : null}
+                    {p.controla_estoque && p.quantidade <= 0 ? <Etiqueta tom="alerta">{t("Estoque zerado")}</Etiqueta> : null}
+                    </>
+                  ) : null}
                 </p>
               </div>
-              <span className="shrink-0 tabular-nums font-medium">
+              <span className="shrink-0 text-base font-semibold tabular-nums">
                 {formatCents(p.preco_cents, p.moeda)}
               </span>
               {podeEditar ? (
@@ -660,6 +738,24 @@ export function ProdutosClient({
                   >
                     {t("Fotos")} ({p.fotos?.length ?? 0})
                   </Button>
+                  {p.ativo && slugDaLoja ? (
+                    <>
+                      <Button variant="ghost" size="sm" onClick={() => void copiarLink(p)} data-testid={`copiar-link-${p.codigo}`}>
+                        {t("Copiar link")}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          const link = linkDoProduto(p);
+                          if (link) window.open(link, "_blank", "noopener");
+                        }}
+                        data-testid={`vitrine-${p.codigo}`}
+                      >
+                        {t("Ver na vitrine")}
+                      </Button>
+                    </>
+                  ) : null}
                   <Button
                     variant="ghost"
                     size="sm"

@@ -186,7 +186,8 @@ describe("a linha do produto quebra em vez de transbordar no celular", () => {
     expect(screen.queryByRole("button", { name: "Desativar" })).toBeNull();
     // O 0 px do nome não era culpa do botão: com ou sem ações, a linha quebra.
     expect(classes(linha())).toContain("max-md:flex-wrap");
-    // Sem ações, a linha tem só dois filhos: a coluna do nome e o preço.
-    expect(linha().children).toHaveLength(2);
+    // Sem ações, a linha tem três filhos: a capa (ou o quadro "sem foto", fork 见外),
+    // a coluna do nome e o preço.
+    expect(linha().children).toHaveLength(3);
   });
 });

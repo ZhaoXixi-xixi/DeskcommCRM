@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoDeData } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import type { Locale } from "date-fns";
@@ -88,7 +89,7 @@ export function mergeThreadItems(
 function dayLabel(d: Date, t: (texto: string) => string = (texto) => texto, locale: Locale): string {
   if (isToday(d)) return t("Hoje");
   if (isYesterday(d)) return t("Ontem");
-  return format(d, "dd/MM/yyyy", { locale: locale });
+  return format(d, padraoDeData(locale, "data"), { locale: locale });
 }
 
 /**

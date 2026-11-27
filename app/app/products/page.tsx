@@ -120,6 +120,21 @@ export default async function ProdutosPage({
     }
   }
 
+  // Fork 见外 — o resumo do catálogo INTEIRO (não da página): quantos à venda e o
+  // que falta neles. Cada número é um `count` à parte, sem trazer linha nenhuma.
+  const base = () =>
+    supabase.from("catalog_products").select("id", { count: "exact", head: true }).eq("organization_id", activeOrg.orgId);
+  const [noCatalogo, aVenda, semFoto, semDescricao, semEstoque] = (
+    await Promise.all([
+      base(),
+      base().eq("ativo", true),
+      base().eq("ativo", true).eq("fotos", "{}"),
+      base().eq("ativo", true).or("descricao.is.null,descricao.eq."),
+      base().eq("ativo", true).eq("controla_estoque", true).lte("quantidade", 0),
+    ])
+  ).map((r) => r.count ?? 0) as [number, number, number, number, number];
+  const { data: org } = await supabase.from("organizations").select("slug").eq("id", activeOrg.orgId).maybeSingle();
+
   const capacidadeLigada = (await capacidadesDaOrganizacao(supabase, activeOrg.orgId)).includes(
     "capacidade_do_produto",
   );
@@ -156,6 +171,8 @@ export default async function ProdutosPage({
       capacidadeLigada={capacidadeLigada}
       apresentacaoLigada={await apresentacaoDoCatalogoLigada(createAdminClient(), activeOrg.orgId)}
       fonteDoFeed={fonteDoFeed}
+      resumo={{ noCatalogo, aVenda, semFoto, semDescricao, semEstoque }}
+      slugDaLoja={(org as { slug?: string } | null)?.slug ?? null}
       textos={{
         titulo: t("Produtos"),
         subtitulo: t(

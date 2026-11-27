@@ -22907,6 +22907,16 @@ export const DICIONARIO: Traducoes = {
   "ficaram de fora pelo limite de 50 por vez. Selecione-os de novo para levar.": {
     es: "quedaron fuera por el límite de 50 por vez. Selecciónelos de nuevo para llevarlos.",
   },
+  // Fork 见外 — tela de produtos
+  "No catálogo": { es: "En el catálogo" },
+  "À venda": { es: "A la venta" },
+  "Fora de venda": { es: "Fuera de venta" },
+  "Faltando foto": { es: "Sin foto" },
+  "Faltando descrição": { es: "Sin descripción" },
+  "Estoque zerado": { es: "Sin stock" },
+  "Ver na vitrine": { es: "Ver en la vitrina" },
+  "Sem foto": { es: "Sin foto" },
+  "Faltas contadas só entre os produtos à venda: sem foto ou descrição, o atendente de IA tem menos o que mostrar ao cliente.": { es: "Las faltas se cuentan solo entre los productos a la venta: sin foto o descripción, el agente de IA tiene menos que mostrar al cliente." },
 };
 
 /**

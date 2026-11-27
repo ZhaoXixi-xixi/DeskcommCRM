@@ -557,7 +557,7 @@ export function MessageBubble({
           // da busca, em cor de destaque e passageiro (quem liga e desliga é o
           // ChatThread). Sem ele o fio rola até a original e ninguém sabe qual
           // bolha era.
-          destacada && "ring-2 ring-primary ring-offset-2 ring-offset-background",
+          destacada && (isOutbound ? "ring-2 ring-foreground/70" : "ring-2 ring-primary") + " ring-offset-2 ring-offset-background",
           // Espaço para a marca de reação, que fica metade para fora do balão.
           Boolean(reacoes?.length) && "mb-3",
         )}
