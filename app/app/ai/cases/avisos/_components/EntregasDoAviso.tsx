@@ -27,6 +27,7 @@
  * intra-organização — casos avisados × casos não avisados —, porque num
  * self-host existe UMA organização e contraste entre contas não existe.
  */
+import { padraoOu } from "@/lib/i18n/datas";
 import Link from "next/link";
 import { format } from "date-fns";
 
@@ -103,7 +104,7 @@ export function EntregasDoAviso({
             return (
               <li key={entrega.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 p-3">
                 <span className="text-xs text-muted-foreground tabular-nums">
-                  {format(new Date(quando), "dd/MM 'às' HH:mm", { locale })}
+                  {format(new Date(quando), padraoOu(locale, "dd/MM 'às' HH:mm", "diaMesHora"), { locale })}
                 </span>
                 <span
                   className="text-xs font-medium"

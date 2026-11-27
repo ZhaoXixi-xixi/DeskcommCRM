@@ -11,6 +11,7 @@
  * comparação é só leitura (o caso do gerente que não junta): não há controle
  * que não faça nada.
  */
+import { padraoOu } from "@/lib/i18n/datas";
 import { format, type Locale } from "date-fns";
 import { useT } from "@/hooks/i18n/useT";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
@@ -118,7 +119,7 @@ function linhasDaComparacao(
       redes: comLink(unicos(f.prospeccao.redes)),
       maps: maps.map((texto) => ({ texto, href: normalizarLink(texto) })),
       origem: f.source ? [{ texto: rotuloDaOrigem(f.source, t) }] : [],
-      criada: [{ texto: format(new Date(f.created_at), "dd/MM/yyyy", { locale: localeDaData }) }],
+      criada: [{ texto: format(new Date(f.created_at), padraoOu(localeDaData, "dd/MM/yyyy", "data"), { locale: localeDaData }) }],
       conversas: [{ texto: String(f.conversas) }],
       negocios: [{ texto: String(f.negocios) }],
       links: f.links.map((l) => {

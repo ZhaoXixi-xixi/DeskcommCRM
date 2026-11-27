@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -105,7 +106,7 @@ function NextFireCell({ iso }: { iso: string | null }) {
   if (!iso) return <span className="text-text-muted">—</span>;
   const d = new Date(iso);
   const relative = formatDistanceToNowStrict(d, { addSuffix: true, locale: localeDaData });
-  const absolute = format(d, "dd/MM/yyyy HH:mm", { locale: localeDaData });
+  const absolute = format(d, padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), { locale: localeDaData });
   return (
     <div title={absolute} className="flex flex-col">
       <span className="text-sm">{relative}</span>

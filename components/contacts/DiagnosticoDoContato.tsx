@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useState, type FormEvent } from "react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -77,7 +78,7 @@ export function DiagnosticoDoContato({ contato, podeEditar, usuarioId }: Props) 
       {diagnostico.em && (
         <span className="text-xs text-muted-foreground">
           {t("Atualizado em")}{" "}
-          {format(new Date(diagnostico.em), "dd/MM/yyyy HH:mm", { locale: localeDaData })}
+          {format(new Date(diagnostico.em), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), { locale: localeDaData })}
         </span>
       )}
     </div>

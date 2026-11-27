@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import { useT } from "@/hooks/i18n/useT";
@@ -215,7 +216,7 @@ export function ContactDetailClient({
           <span>
             {t("Contato anonimizado (LGPD)")}
             {contact.anonymized_at &&
-              ` em ${format(new Date(contact.anonymized_at), "dd/MM/yyyy", { locale: localeDaData })}`}
+              ` em ${format(new Date(contact.anonymized_at), padraoOu(localeDaData, "dd/MM/yyyy", "data"), { locale: localeDaData })}`}
             {t(" — edição bloqueada.")}
           </span>
         </div>
@@ -502,7 +503,7 @@ export function ContactDetailClient({
                   {t("Data de nascimento")}
                 </dt>
                 <dd className="mt-1">
-                  {contact.birthdate ? contact.birthdate.split("-").reverse().join("/") : "—"}
+                  {contact.birthdate ? (localeDaData.code === "zh-CN" ? contact.birthdate : contact.birthdate.split("-").reverse().join("/")) : "—"}
                 </dd>
               </div>
               {(contact.zip_code || contact.street || contact.city || contact.state) && (
@@ -540,7 +541,7 @@ export function ContactDetailClient({
                 <dt className="text-xs uppercase text-muted-foreground">{t("Última atividade")}</dt>
                 <dd className="mt-1">
                   {contact.last_activity_at
-                    ? format(new Date(contact.last_activity_at), "dd/MM/yyyy HH:mm", {
+                    ? format(new Date(contact.last_activity_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), {
                         locale: localeDaData,
                       })
                     : "—"}
@@ -549,7 +550,7 @@ export function ContactDetailClient({
               <div>
                 <dt className="text-xs uppercase text-muted-foreground">{t("Criado em")}</dt>
                 <dd className="mt-1">
-                  {format(new Date(contact.created_at), "dd/MM/yyyy", { locale: localeDaData })}
+                  {format(new Date(contact.created_at), padraoOu(localeDaData, "dd/MM/yyyy", "data"), { locale: localeDaData })}
                 </dd>
               </div>
               {/*
@@ -564,7 +565,7 @@ export function ContactDetailClient({
                     {t("Cliente desde")}
                   </dt>
                   <dd className="mt-1">
-                    {format(new Date(contact.first_service_at), "dd/MM/yyyy", {
+                    {format(new Date(contact.first_service_at), padraoOu(localeDaData, "dd/MM/yyyy", "data"), {
                       locale: localeDaData,
                     })}
                   </dd>
@@ -682,7 +683,7 @@ export function ContactDetailClient({
                     {/* Sem data legível (`declinedAt: null`), a frase perde o "em" e a vírgula:
                         "Recusa registrada pela equipe.", nunca "Recusa registrada em, pela equipe." */}
                     {recusaDeOfertas?.declinedAt
-                      ? `${t("Recusa registrada em")} ${format(new Date(recusaDeOfertas.declinedAt), "dd/MM/yyyy", { locale: localeDaData })}, `
+                      ? `${t("Recusa registrada em")} ${format(new Date(recusaDeOfertas.declinedAt), padraoOu(localeDaData, "dd/MM/yyyy", "data"), { locale: localeDaData })}, `
                       : `${t("Recusa registrada")} `}
                     {recusaDeOfertas?.origem === "conversa_de_prospeccao"
                       ? t("na conversa da prospecção")
@@ -735,7 +736,7 @@ export function ContactDetailClient({
                 <p className="text-sm text-muted-foreground">
                   {t("Este contato já foi anonimizado")}
                   {contact.anonymized_at &&
-                    ` em ${format(new Date(contact.anonymized_at), "dd/MM/yyyy HH:mm", { locale: localeDaData })}`}
+                    ` em ${format(new Date(contact.anonymized_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), { locale: localeDaData })}`}
                   .
                 </p>
               ) : (

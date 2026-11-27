@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import type { Locale } from "date-fns";
 
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
@@ -32,7 +33,7 @@ const ICON_MAP: Record<string, PhosphorIcon> = {
 function dayHeader(d: Date, t: (texto: string) => string = (texto) => texto, locale: Locale): string {
   if (isToday(d)) return t("Hoje");
   if (isYesterday(d)) return t("Ontem");
-  return format(d, "dd/MM/yyyy", { locale: locale });
+  return format(d, padraoOu(locale, "dd/MM/yyyy", "data"), { locale: locale });
 }
 
 /**

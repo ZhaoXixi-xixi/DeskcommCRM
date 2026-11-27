@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 
@@ -232,7 +233,7 @@ export function TabelaDeCampanhas({ linhas, moeda, avisos }: Props) {
     if (dia.getFullYear() !== ano || dia.getMonth() !== mes - 1 || dia.getDate() !== diaDoMes) {
       return traco;
     }
-    return <>{format(dia, "dd/MM/yyyy", { locale: localeDaData })}</>;
+    return <>{format(dia, padraoOu(localeDaData, "dd/MM/yyyy", "data"), { locale: localeDaData })}</>;
   };
 
   if (linhas.length === 0) {

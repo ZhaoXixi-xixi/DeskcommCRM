@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import { format } from "date-fns";
@@ -35,7 +36,7 @@ export function AuditTrail({ entries }: AuditTrailProps) {
             <div className={`pb-3 min-w-0 flex-1 ${isLast ? "pb-0" : ""}`}>
               <p className="text-sm font-mono font-medium truncate">{entry.action}</p>
               <p className="text-xs text-muted-foreground">
-                {format(new Date(entry.created_at), "dd/MM/yyyy HH:mm:ss", { locale: localeDaData })}
+                {format(new Date(entry.created_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm:ss", "dataHoraSeg"), { locale: localeDaData })}
                 {entry.actor_user_id && (
                   <span className="ml-2 opacity-60">
                     {t("por")} {entry.actor_user_id.slice(0, 8)}…

@@ -5,6 +5,7 @@
  * "Revogar". O token nunca aparece. Só `admin` da organização — para os demais
  * a action recusa e o cartão não aparece.
  */
+import { padraoOu } from "@/lib/i18n/datas";
 import { format } from "date-fns";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,11 +13,13 @@ import { toast } from "sonner";
 import { listarAcessosMcpDoContato, revogarAcessoMcpDoContato } from "@/app/actions/agents/acessosMcpDoContato";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 import { useT } from "@/hooks/i18n/useT";
 import type { AcessoDoContato } from "@/lib/mcp/servidor-externo/do-agente/credencial";
 
 export function AcessosMcpDoContato({ contactId }: { contactId: string }) {
   const t = useT();
+  const localeDaData = useLocaleDeData();
   const [acessos, setAcessos] = useState<AcessoDoContato[] | null>(null);
   const [visivel, setVisivel] = useState(true);
   const [revogando, setRevogando] = useState<string | null>(null);
@@ -77,9 +80,9 @@ export function AcessosMcpDoContato({ contactId }: { contactId: string }) {
               <div className="space-y-0.5 text-sm">
                 <p className="font-medium">{a.servidorNome}</p>
                 <p className="text-xs text-muted-foreground">
-                  {t("Desde")} {format(new Date(a.desde), "dd/MM/yyyy HH:mm")}
-                  {a.ultimoUso ? ` · ${t("último uso")} ${format(new Date(a.ultimoUso), "dd/MM/yyyy HH:mm")}` : ""}
-                  {a.revogarApos ? ` · ${t("revogação agendada")} ${format(new Date(a.revogarApos), "dd/MM/yyyy HH:mm")}` : ""}
+                  {t("Desde")} {format(new Date(a.desde), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"))}
+                  {a.ultimoUso ? ` · ${t("último uso")} ${format(new Date(a.ultimoUso), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"))}` : ""}
+                  {a.revogarApos ? ` · ${t("revogação agendada")} ${format(new Date(a.revogarApos), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"))}` : ""}
                 </p>
                 {a.escopos.length > 0 ? (
                   <p className="text-xs text-muted-foreground">

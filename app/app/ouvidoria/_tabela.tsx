@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { localeDeData } from "@/lib/i18n/datas";
+import { localeDeData, padraoOu } from "@/lib/i18n/datas";
 import { traduzir } from "@/lib/i18n/dicionario";
 import type { Idioma } from "@/lib/i18n/idiomas";
 import type { CanalDaOuvidoria, StatusDaOuvidoria } from "@/lib/ouvidoria/registro";
@@ -66,7 +66,7 @@ const CANAL_ROTULO: Record<CanalDaOuvidoria, string> = {
 function dataLegivel(iso: string, idioma: Idioma): string {
   const data = new Date(iso);
   if (Number.isNaN(data.getTime())) return iso;
-  return format(data, "dd/MM/yyyy HH:mm", { locale: localeDeData(idioma) });
+  return format(data, padraoOu(localeDeData(idioma), "dd/MM/yyyy HH:mm", "dataHora"), { locale: localeDeData(idioma) });
 }
 
 function enderecoDaLista(status: StatusDaOuvidoria | null, pagina: number): string {

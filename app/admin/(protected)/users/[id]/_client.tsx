@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import type { Locale } from "date-fns";
 
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
@@ -64,7 +65,7 @@ function relativeDate(iso: string | null, locale: Locale): string {
 function absoluteDate(iso: string | null, locale: Locale): string {
   if (!iso) return "—";
   try {
-    return format(new Date(iso), "dd/MM/yyyy HH:mm", { locale: locale });
+    return format(new Date(iso), padraoOu(locale, "dd/MM/yyyy HH:mm", "dataHora"), { locale: locale });
   } catch {
     return iso;
   }
@@ -260,7 +261,7 @@ export function UserDetailClient({ id }: UserDetailClientProps) {
                         {entry.action}
                       </span>
                       <span className="text-muted-foreground">
-                        {format(new Date(entry.created_at), "dd/MM HH:mm:ss", {
+                        {format(new Date(entry.created_at), padraoOu(localeDaData, "dd/MM HH:mm:ss", "diaMesHoraSeg"), {
                           locale: localeDaData,
                         })}
                       </span>

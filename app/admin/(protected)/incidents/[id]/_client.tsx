@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 import Link from "next/link";
 import { formatDistanceToNow, format } from "date-fns";
@@ -122,7 +123,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
               locale: localeDaData,
             })}
             {" · "}
-            {format(new Date(incident.created_at), "dd/MM/yyyy HH:mm", {
+            {format(new Date(incident.created_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), {
               locale: localeDaData,
             })}
           </p>
@@ -174,7 +175,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
                         {entry.action}
                       </span>
                       <span className="ml-2 text-muted-foreground">
-                        {format(new Date(entry.created_at), "dd/MM HH:mm:ss", {
+                        {format(new Date(entry.created_at), padraoOu(localeDaData, "dd/MM HH:mm:ss", "diaMesHoraSeg"), {
                           locale: localeDaData,
                         })}
                       </span>
@@ -200,7 +201,7 @@ export function IncidentDetailClient({ id }: IncidentDetailClientProps) {
             {incident.resolved_at && (
               <p className="text-xs text-muted-foreground">
                 {t("Resolvido em")}{" "}
-                {format(new Date(incident.resolved_at), "dd/MM/yyyy HH:mm", {
+                {format(new Date(incident.resolved_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), {
                   locale: localeDaData,
                 })}
               </p>

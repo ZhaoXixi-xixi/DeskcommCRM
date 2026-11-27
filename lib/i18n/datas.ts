@@ -43,24 +43,37 @@ const LOCALE_DE_DATA: Record<Idioma, Locale> = {
  * em cada tela, e em chinês isso lê como data brasileira. Chinês recebe a forma
  * ISO (2026-11-19), que é a do ERP da casa; os outros idiomas seguem como antes.
  */
-export type FormaDaData = "data" | "dataHora" | "diaMes" | "diaMesHora";
+export type FormaDaData = "data" | "dataHora" | "dataHoraSeg" | "diaMes" | "diaMesHora" | "diaMesHoraSeg";
 
 const FORMAS_PADRAO: Record<FormaDaData, string> = {
   data: "dd/MM/yyyy",
   dataHora: "dd/MM/yyyy HH:mm",
+  dataHoraSeg: "dd/MM/yyyy HH:mm:ss",
   diaMes: "dd/MM",
   diaMesHora: "dd/MM HH:mm",
+  diaMesHoraSeg: "dd/MM HH:mm:ss",
 };
 
 const FORMAS_CHINES: Record<FormaDaData, string> = {
   data: "yyyy-MM-dd",
   dataHora: "yyyy-MM-dd HH:mm",
+  dataHoraSeg: "yyyy-MM-dd HH:mm:ss",
   diaMes: "M月d日",
   diaMesHora: "M月d日 HH:mm",
+  diaMesHoraSeg: "M月d日 HH:mm:ss",
 };
 
 export function padraoDeData(locale: Locale | undefined, forma: FormaDaData): string {
   return (locale?.code === "zh-CN" ? FORMAS_CHINES : FORMAS_PADRAO)[forma];
+}
+
+/**
+ * Para as telas que escreviam o formato à mão (às vezes com texto, como `'às'`):
+ * em chinês vale a forma da casa, nos outros idiomas o formato ORIGINAL da tela,
+ * sem mudar nada do que pt-BR e es já viam.
+ */
+export function padraoOu(locale: Locale | undefined, original: string, forma: FormaDaData): string {
+  return locale?.code === "zh-CN" ? FORMAS_CHINES[forma] : original;
 }
 
 /** O `Locale` do date-fns para quem está lendo. */

@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 import Link from "next/link";
 import { format } from "date-fns";
@@ -159,7 +160,7 @@ function AuditTrailInline({ entries }: { entries: AuditEntry[] }) {
             <div className={`pb-3 min-w-0 flex-1 ${isLast ? "pb-0" : ""}`}>
               <p className="text-sm font-mono font-medium truncate">{entry.action}</p>
               <p className="text-xs text-muted-foreground">
-                {format(new Date(entry.created_at), "dd/MM/yyyy HH:mm:ss", { locale: localeDaData })}
+                {format(new Date(entry.created_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm:ss", "dataHoraSeg"), { locale: localeDaData })}
                 {entry.actor_user_id && (
                   <span className="ml-2 opacity-60">
                     {t("por")} {entry.actor_user_id.slice(0, 8)}…
@@ -284,7 +285,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
 
         <p className="text-sm text-muted-foreground">
           {t("Recebido em")}{" "}
-          {format(new Date(request.received_at), `dd/MM/yyyy '${t("às")}' HH:mm`, { locale: localeDaData })}
+          {format(new Date(request.received_at), padraoOu(localeDaData, `dd/MM/yyyy '${t("às")}' HH:mm`, "dataHora"), { locale: localeDaData })}
           {request.due_at && (
             <>
               {" · "}
@@ -345,7 +346,7 @@ export function LgpdRequestAdminDetail({ id }: Props) {
             {request.completed_at && (
               <Row
                 label={t("Concluído em")}
-                value={format(new Date(request.completed_at), "dd/MM/yyyy HH:mm", {
+                value={format(new Date(request.completed_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), {
                   locale: localeDaData,
                 })}
               />

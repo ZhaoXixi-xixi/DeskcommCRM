@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData, useTagDeIdioma } from "@/hooks/i18n/useLocaleDeData";
 
 import type { Locale } from "date-fns";
@@ -59,7 +60,7 @@ const PAUSAVEL = new Set(["active", "waiting_reply"]);
 function absoluta(iso: string | null, locale: Locale): string {
   if (!iso) return "—";
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "—" : format(d, "dd/MM/yyyy HH:mm", { locale: locale });
+  return Number.isNaN(d.getTime()) ? "—" : format(d, padraoOu(locale, "dd/MM/yyyy HH:mm", "dataHora"), { locale: locale });
 }
 
 function relativa(iso: string | null, locale: Locale): string | null {

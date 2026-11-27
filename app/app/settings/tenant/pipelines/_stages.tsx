@@ -1,4 +1,5 @@
 "use client";
+import { padraoOu } from "@/lib/i18n/datas";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { toast } from "sonner";
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
@@ -36,6 +37,8 @@ import type { TaxaDaEtapa } from "@/lib/metrics/taxa-da-etapa";
 import { Archive, CaretDown, CaretUp, DragHandle, Plus, Warning } from "@/lib/ui/icons";
 import { SeloDeAutoria } from "@/components/operacao/SeloDeAutoria";
 import { CorDaEtapa } from "./_cor-da-etapa";
+import type { Locale } from "date-fns";
+import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 import { useT } from "@/hooks/i18n/useT";
 
 import { mensagemDeErro } from "./_mapping";
@@ -274,10 +277,12 @@ export function periodoDaTaxa(
   inicio: string,
   fim: string,
   t: (texto: string) => string = (texto) => texto,
+  locale?: Locale,
 ): string {
+  const forma = padraoOu(locale, "dd/MM/yyyy", "data");
   return t("Período: de {inicio} a {fim}")
-    .replace("{inicio}", format(new Date(inicio), "dd/MM/yyyy"))
-    .replace("{fim}", format(new Date(fim), "dd/MM/yyyy"));
+    .replace("{inicio}", format(new Date(inicio), forma))
+    .replace("{fim}", format(new Date(fim), forma));
 }
 
 /**
@@ -361,11 +366,12 @@ function SugestaoDeTaxa({
   aoAceitar: (valor: number) => void;
 }) {
   const t = useT();
+  const localeDaData = useLocaleDeData();
   const sugestao = taxa.sugestao;
   return (
     <div className="space-y-1">
       <p className="text-xs leading-snug text-text-muted" data-testid={`taxa-${taxa.etapa_id}`}>
-        {fraseDaTaxa(taxa, t)} {periodoDaTaxa(inicio, fim, t)}
+        {fraseDaTaxa(taxa, t)} {periodoDaTaxa(inicio, fim, t, localeDaData)}
         {truncado ? ` ${t("Amostra limitada: este número cobre só parte do período.")}` : ""}
       </p>
       {sugestao !== null ? (

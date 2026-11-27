@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { format } from "date-fns";
 import Link from "next/link";
 
@@ -96,7 +97,7 @@ export function UltimasCompras({
               <div className="mt-0.5 text-muted-foreground" data-testid="compra-data">
                 {t("Ganho em {data}").replace(
                   "{data}",
-                  format(new Date(compra.closed_at), "dd/MM/yyyy", { locale: localeDaData }),
+                  format(new Date(compra.closed_at), padraoOu(localeDaData, "dd/MM/yyyy", "data"), { locale: localeDaData }),
                 )}
               </div>
             )}

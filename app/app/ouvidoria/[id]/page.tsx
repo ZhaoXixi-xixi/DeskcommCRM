@@ -7,7 +7,7 @@ import { lerManifestacaoDaOuvidoria } from "@/app/actions/ouvidoria/ler-manifest
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { localeDeData } from "@/lib/i18n/datas";
+import { localeDeData, padraoOu } from "@/lib/i18n/datas";
 import { traduzir } from "@/lib/i18n/dicionario";
 import type { Idioma } from "@/lib/i18n/idiomas";
 import { acessoDaOuvidoria } from "@/lib/ouvidoria/acesso";
@@ -67,7 +67,7 @@ const STATUS_ROTULO: Record<StatusDaOuvidoria, string> = {
 function dataLegivel(iso: string, idioma: Idioma): string {
   const data = new Date(iso);
   if (Number.isNaN(data.getTime())) return iso;
-  return format(data, "dd/MM/yyyy HH:mm", { locale: localeDeData(idioma) });
+  return format(data, padraoOu(localeDeData(idioma), "dd/MM/yyyy HH:mm", "dataHora"), { locale: localeDeData(idioma) });
 }
 
 export default async function ManifestacaoDaOuvidoriaPage({

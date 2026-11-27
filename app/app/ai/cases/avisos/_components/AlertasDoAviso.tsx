@@ -22,6 +22,7 @@
  * entrada por par de números. Os números são renderizados ao lado do texto
  * traduzido, e a frase traduzida nunca os contém.
  */
+import { padraoOu } from "@/lib/i18n/datas";
 import Link from "next/link";
 import { format } from "date-fns";
 
@@ -147,7 +148,7 @@ export function AlertasDoAviso({ avisos }: { avisos: AvisoDaTela[] }) {
                     <>
                       {" · "}
                       {t("em aquecimento até")}{" "}
-                      {format(new Date(aviso.dados.fimEm), "dd/MM", { locale })}
+                      {format(new Date(aviso.dados.fimEm), padraoOu(locale, "dd/MM", "diaMes"), { locale })}
                     </>
                   ) : null}
                 </p>
@@ -160,7 +161,7 @@ export function AlertasDoAviso({ avisos }: { avisos: AvisoDaTela[] }) {
                     <>
                       {" · "}
                       {t("a última em")}{" "}
-                      {format(new Date(aviso.dados.ultimaEm), "dd/MM 'às' HH:mm", { locale })}
+                      {format(new Date(aviso.dados.ultimaEm), padraoOu(locale, "dd/MM 'às' HH:mm", "diaMesHora"), { locale })}
                     </>
                   ) : null}
                 </p>

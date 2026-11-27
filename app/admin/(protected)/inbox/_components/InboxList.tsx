@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import type { Locale } from "date-fns";
@@ -46,7 +47,7 @@ function relativeTime(iso: string | null, locale: Locale): string {
   if (d.toDateString() === now.toDateString()) return format(d, "HH:mm");
   const diff = (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
   if (diff < 7) return formatDistanceToNowStrict(d, { addSuffix: false, locale: locale });
-  return format(d, "dd/MM");
+  return format(d, padraoOu(locale, "dd/MM", "diaMes"), { locale });
 }
 
 function contactName(row: AdminConversationRow, t: (texto: string) => string): string {

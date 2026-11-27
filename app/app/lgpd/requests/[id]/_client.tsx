@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import Link from "next/link";
@@ -108,7 +109,7 @@ export function LgpdRequestDetail({ id, hrefDaLista = "/app/lgpd/requests" }: Pr
 
         <p className="text-sm text-muted-foreground">
           {t("Recebido em")}{" "}
-          {format(new Date(request.received_at), `dd/MM/yyyy '${t("às")}' HH:mm`, { locale: localeDaData })}
+          {format(new Date(request.received_at), padraoOu(localeDaData, `dd/MM/yyyy '${t("às")}' HH:mm`, "dataHora"), { locale: localeDaData })}
           {request.due_at && (
             <>
               {" · "}
@@ -195,7 +196,7 @@ export function LgpdRequestDetail({ id, hrefDaLista = "/app/lgpd/requests" }: Pr
             {request.completed_at && (
               <Row
                 label={t("Concluído em")}
-                value={format(new Date(request.completed_at), "dd/MM/yyyy HH:mm", { locale: localeDaData })}
+                value={format(new Date(request.completed_at), padraoOu(localeDaData, "dd/MM/yyyy HH:mm", "dataHora"), { locale: localeDaData })}
               />
             )}
             {request.error_message && (

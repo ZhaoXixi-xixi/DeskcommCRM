@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import type { Locale } from "date-fns";
@@ -27,7 +28,7 @@ function maskEmail(email: string | null | undefined): string {
 
 function formatDate(iso: string, locale: Locale): string {
   try {
-    return format(new Date(iso), "dd/MM/yyyy HH:mm:ss", { locale: locale });
+    return format(new Date(iso), padraoOu(locale, "dd/MM/yyyy HH:mm:ss", "dataHoraSeg"), { locale: locale });
   } catch {
     return iso;
   }

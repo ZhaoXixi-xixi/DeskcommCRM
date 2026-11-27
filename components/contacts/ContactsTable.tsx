@@ -1,5 +1,6 @@
 "use client";
 
+import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import type { Locale } from "date-fns";
@@ -72,7 +73,7 @@ function formatUltimaAtividade(iso: string, locale: Locale, now = new Date()): s
   if (isToday(d) || isYesterday(d)) {
     return formatRelative(d, now, { locale: locale });
   }
-  return format(d, "dd/MM/yyyy", { locale: locale });
+  return format(d, padraoOu(locale, "dd/MM/yyyy", "data"), { locale: locale });
 }
 
 function SortableHead({
