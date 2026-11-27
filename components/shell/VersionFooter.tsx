@@ -25,6 +25,11 @@ export function VersionFooter({
   if (!data) return null;
 
   const label = data.current_version.replace(/^v/i, "");
+  // Fork 见外: a imagem vem do nosso build (branch zh-cn), sem versão de release.
+  // Sem número, o rodapé só dizia "versão ainda não confirmada / execução não
+  // confirmada" — ruído permanente. E a atualização do upstream NÃO é caminho
+  // desta instalação (trocaria a imagem pela oficial). Sem número, nada aparece.
+  if (!label) return null;
   const personalizada = data.identity?.customized === true;
   const titulo = label
     ? `${t("Versão")} ${label}${personalizada ? ` · ${t("Personalizada")}` : ""}`

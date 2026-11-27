@@ -22907,6 +22907,9 @@ export const DICIONARIO: Traducoes = {
   "ficaram de fora pelo limite de 50 por vez. Selecione-os de novo para levar.": {
     es: "quedaron fuera por el límite de 50 por vez. Selecciónelos de nuevo para llevarlos.",
   },
+  // Fork 见外 — agentes
+  "Agente com ferramentas": { es: "Agente con herramientas" },
+  "Responde pela base de conhecimento": { es: "Responde con la base de conocimiento" },
   // Fork 见外 — contatos
   "Nome · WhatsApp": { es: "Nombre · WhatsApp" },
   "{n} contatos no total": { es: "{n} contactos en total" },

@@ -36,6 +36,18 @@ interface Props {
  * o cliente ou o que ficou no rascunho — e essa é exatamente a confusão que
  * custou uma depuração no modelo errado.
  */
+/** Fork 见外 — o tipo do agente em palavras, não o código interno (`mcp_agent`). */
+function rotuloDoTipo(kind: string, t: (texto: string) => string): string {
+  switch (kind) {
+    case "mcp_agent":
+      return t("Agente com ferramentas");
+    case "rag_bot":
+      return t("Responde pela base de conhecimento");
+    default:
+      return kind;
+  }
+}
+
 export function origemDoModelo(agent: AgentRow): "versao_publicada" | "cadastro" {
   return agent.versao_publicada?.model ? "versao_publicada" : "cadastro";
 }
@@ -90,11 +102,11 @@ export function AgentCard({ agent, canWrite }: Props) {
       <dl className="grid grid-cols-2 gap-2 pt-1 text-xs">
         <div>
           <dt className="text-muted-foreground">{t("Tipo")}</dt>
-          <dd className="font-mono">{agent.kind ?? "rag_bot"}</dd>
+          <dd>{rotuloDoTipo(agent.kind ?? "rag_bot", t)}</dd>
         </div>
         <div>
           <dt className="text-muted-foreground">{t("Prioridade")}</dt>
-          <dd className="font-mono">{agent.priority ?? "—"}</dd>
+          <dd className="tabular-nums">{agent.priority ?? "—"}</dd>
         </div>
       </dl>
       <div className="mt-auto pt-2">
