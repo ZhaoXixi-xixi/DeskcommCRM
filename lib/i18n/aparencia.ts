@@ -78,6 +78,9 @@ export const TEXTOS_APARENCIA = {
   "Limpo e arejado": { es: "Limpio y aireado" },
   "Azul-gelo, muito ar entre os blocos e um menu de vidro que deixa o fundo atravessar. Títulos leves, números firmes.": { es: "Azul hielo, mucho aire entre los bloques y un menú de vidrio que deja ver el fondo. Títulos ligeros, números firmes." },
   "Vinho": { es: "Vino" },
+  "Limão": { es: "Lima" },
+  "Claro e direto": { es: "Claro y directo" },
+  "Fundo branco puro, item ativo do menu em verde-limão, botões em grafite e cartões com sombra suave. O mesmo visual do ERP da casa.": { es: "Fondo blanco puro, elemento activo del menú en verde lima, botones en grafito y tarjetas con sombra suave. El mismo aspecto del ERP de la casa." },
   "Premium aveludado": { es: "Premium aterciopelado" },
   "Menu cor de vinho com textura de veludo, ouro rosé nos destaques e títulos em serifa. Para marcas que vendem exclusividade.": { es: "Menú color vino con textura de terciopelo, oro rosa en los detalles y títulos con serifa. Para marcas que venden exclusividad." },
 };

@@ -347,7 +347,7 @@ describe("controle positivo — o produto sem marca não pode se mexer", () => {
 
     const p = pintadosDaSemente("#506d48");
     // Claro: os dois números que `contraste.ts` documenta como medidos à mão.
-    expect(foco(p.claro, "--color-bg")).toBeCloseTo(3.79, 2);
+    expect(foco(p.claro, "--color-bg")).toBeCloseTo(4, 2); // fork 见外: bg branco (era 3,79)
     expect(foco(p.claro, "--color-surface-elevated")).toBeCloseTo(3.6, 2);
     // Escuro: 6,30 e 5,22 na rampa DERIVADA da semente; os literais do
     // `globals.css` (`#82a077`) dão 6,31 e 5,23 — a rampa reproduz a Sage com
@@ -377,7 +377,7 @@ describe("a navy #0f172a — o defeito que a prova em tela achou", () => {
     // pintava `--color-accent-400: #545f77`, o stop CRU. O tema escuro anda -1,
     // então o anel agora pinta `#828a9d`, o stop 300 da rampa da marca.
     const p = pintadosDaSemente("#0f172a");
-    expect(foco(p.claro, "--color-bg")).toBeCloseTo(10.77, 2);
+    expect(foco(p.claro, "--color-bg")).toBeCloseTo(11.33, 2); // fork 见外: era 10,77
     expect(foco(p.claro, "--color-surface-elevated")).toBeCloseTo(10.22, 2);
     expect(foco(p.escuro, "--color-bg")).toBeCloseTo(5.28, 2);
     expect(foco(p.escuro, "--color-surface-elevated")).toBeCloseTo(4.39, 2);

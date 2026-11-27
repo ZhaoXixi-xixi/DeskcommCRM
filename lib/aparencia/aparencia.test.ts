@@ -23,7 +23,7 @@ import { CHAVES_DE_FONTE, FONTES } from "./fontes";
  *    de hoje, byte a byte.
  *  - `settings` é jsonb livre: nada que esteja lá derruba o layout de `/app`.
  *  - Nenhum template pinta o que não é dele: todo seletor carrega o id.
- *  - Os 10 passam no piso de contraste da WCAG nos DOIS modos.
+ *  - Os 11 passam no piso de contraste da WCAG nos DOIS modos.
  */
 
 /** As partes de uma lista de seletores, sem quebrar a vírgula de dentro de `:is(...)`. */
@@ -133,11 +133,11 @@ describe("cssDaCorSecundaria", () => {
   });
 });
 
-describe("catálogo — os 10 templates", () => {
-  it("são dez, com id único no formato de atributo", () => {
-    expect(TEMPLATES).toHaveLength(10);
+describe("catálogo — os 11 templates", () => {
+  it("são onze (os dez do produto + Limão, do fork), com id único no formato de atributo", () => {
+    expect(TEMPLATES).toHaveLength(11);
     const ids = TEMPLATES.map((t) => t.id);
-    expect(new Set(ids).size).toBe(10);
+    expect(new Set(ids).size).toBe(11);
     for (const id of ids) expect(id).toMatch(/^[a-z][a-z0-9-]{1,31}$/);
   });
 

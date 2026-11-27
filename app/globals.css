@@ -32,9 +32,9 @@
 
 :root {
   /* Surfaces (light) */
-  --color-bg: #faf9f6;
+  --color-bg: #ffffff; /* fork 见外：branco puro, sem bege (era #faf9f6) */
   --color-surface: #ffffff;
-  --color-surface-elevated: #f5f3ee;
+  --color-surface-elevated: #f2f3f6; /* fork 见外: era #f5f3ee */
   --color-overlay: rgba(28, 26, 22, 0.42);
 
   /* Text (light) */
@@ -43,8 +43,8 @@
   --color-text-subtle: #7d786c;
 
   /* Borders (light) */
-  --color-border: #e7e3da;
-  --color-border-strong: #d2cdbf;
+  --color-border: #eceef2; /* fork 见外: era #e7e3da */
+  --color-border-strong: #dcdfe5; /* fork 见外: era #d2cdbf */
 
   /* ---- Identidade de canal (#4094) -------------------------------------
    * A cor da faixa/ícone que marca DE ONDE veio a mensagem (aviso da esquina
@@ -275,15 +275,15 @@
    (lib/branding/css.ts), que só ganha consumidor com a tela de marca.
    ───────────────────────────────────────────────────────────────────────── */
 [data-theme="light"] {
-  --color-bg: #faf9f6;
+  --color-bg: #ffffff; /* fork 见外：branco puro, sem bege (era #faf9f6) */
   --color-surface: #ffffff;
-  --color-surface-elevated: #f5f3ee;
+  --color-surface-elevated: #f2f3f6; /* fork 见外: era #f5f3ee */
   --color-overlay: rgba(28, 26, 22, 0.42);
   --color-text: #1c1a16;
   --color-text-muted: #5d594f;
   --color-text-subtle: #7d786c;
-  --color-border: #e7e3da;
-  --color-border-strong: #d2cdbf;
+  --color-border: #eceef2; /* fork 见外: era #e7e3da */
+  --color-border-strong: #dcdfe5; /* fork 见外: era #d2cdbf */
 
   /* ---- Identidade de canal (#4094) -------------------------------------
    * A cor da faixa/ícone que marca DE ONDE veio a mensagem (aviso da esquina
