@@ -33,21 +33,26 @@ export interface ResumoDoCatalogo {
   semEstoque: number;
 }
 
+// O aviso do ERP da casa (amarelo claro, texto âmbar escuro). O `warning-bg` do
+// produto é um âmbar a 12% que, sobre branco, sai bege — e bege está fora.
+const AVISO_FUNDO = "bg-[#fff1c2] dark:bg-warning-bg";
+const AVISO_TEXTO = "text-[#7a5a0c] dark:text-warning-fg";
+
 function Bloco({ rotulo, valor, alerta = false, testid }: { rotulo: string; valor: number; alerta?: boolean; testid: string }) {
   return (
     <div
-      className={`rounded-xl bg-card p-4 shadow-sm ring-1 ring-border/60 ${alerta && valor > 0 ? "bg-warning-bg" : ""}`}
+      className={`rounded-xl p-4 shadow-sm ring-1 ring-border/60 ${alerta && valor > 0 ? AVISO_FUNDO : "bg-card"}`}
       data-testid={testid}
     >
       <p className="text-xs text-muted-foreground">{rotulo}</p>
-      <p className={`mt-1 text-2xl font-semibold tabular-nums ${alerta && valor > 0 ? "text-warning-fg" : ""}`}>{valor}</p>
+      <p className={`mt-1 text-2xl font-semibold tabular-nums ${alerta && valor > 0 ? AVISO_TEXTO : ""}`}>{valor}</p>
     </div>
   );
 }
 
 function Etiqueta({ children, tom }: { children: React.ReactNode; tom: "ok" | "alerta" | "neutro" }) {
   const cor =
-    tom === "ok" ? "bg-success-bg text-success-fg" : tom === "alerta" ? "bg-warning-bg text-warning-fg" : "bg-muted text-muted-foreground";
+    tom === "ok" ? "bg-success-bg text-success-fg" : tom === "alerta" ? `${AVISO_FUNDO} ${AVISO_TEXTO}` : "bg-muted text-muted-foreground";
   return <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${cor}`}>{children}</span>;
 }
 

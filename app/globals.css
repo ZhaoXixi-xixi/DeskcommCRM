@@ -93,7 +93,7 @@
   --color-success-bg: rgba(90, 138, 95, 0.12);
   --color-success-fg: #41673f;
   --color-warning: #b07a2b;
-  --color-warning-bg: rgba(176, 122, 43, 0.12);
+  --color-warning-bg: #fff1c2; /* fork 见外: amarelo do ERP (o âmbar a 12% saía bege sobre branco) */
   --color-warning-fg: #875a1a;
   --color-error: #a94a3c;
   --color-error-bg: rgba(169, 74, 60, 0.12);
@@ -315,7 +315,7 @@
   --color-success-bg: rgba(90, 138, 95, 0.12);
   --color-success-fg: #41673f;
   --color-warning: #b07a2b;
-  --color-warning-bg: rgba(176, 122, 43, 0.12);
+  --color-warning-bg: #fff1c2; /* fork 见外: amarelo do ERP (o âmbar a 12% saía bege sobre branco) */
   --color-warning-fg: #875a1a;
   --color-error: #a94a3c;
   --color-error-bg: rgba(169, 74, 60, 0.12);
