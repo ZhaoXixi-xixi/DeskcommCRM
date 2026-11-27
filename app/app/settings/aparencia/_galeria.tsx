@@ -545,7 +545,7 @@ function Miniatura({ template, modo }: { template: Template | null; modo: "claro
             {t("Funil de vendas")}
           </span>
           <div className="grid grid-cols-2 gap-1">
-            {["R$ 9.800", "R$ 3.720"].map((v) => (
+            {["$9,800", "$3,720"].map((v) => (
               <div
                 key={v}
                 className="flex flex-col gap-0.5 p-1"

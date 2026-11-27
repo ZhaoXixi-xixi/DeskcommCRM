@@ -130,6 +130,51 @@ const SEM_RESPIRO = { menuRecuoY: "0px", menuRecuoX: "0px", menuRaio: "0px", con
 
 export const TEMPLATES: readonly Template[] = [
   {
+    // Fork 见外：o visual do ERP próprio (erp.cicy.vip) — branco puro, nada de bege, profundidade por sombra.
+    // Primeiro da galeria: é o visual da casa (o fork não se prende mais ao merge do upstream).
+    id: "limao",
+    nome: "Limão",
+    categoria: "Claro e direto",
+    descricao:
+      "Fundo branco puro, item ativo do menu em verde-limão, botões em grafite e cartões com sombra suave. O mesmo visual do ERP da casa.",
+    fonteTexto: "jakarta",
+    fonteTitulo: "jakarta",
+    forma: {
+      ...SEM_RESPIRO,
+      raios: ["8px", "12px", "16px", "20px"],
+      menuRaioItem: "14px", menuDesfoque: "0px", indicadorLargura: "0px",
+      tituloPeso: "600", tituloEspaco: "-0.02em",
+    },
+    cores: {
+      claro: {
+        fundo: "#ffffff", superficie: "#ffffff", elevada: "#f2f3f6",
+        texto: "#1d1f24", textoSuave: "#5d626b", textoSutil: "#6c717a", borda: "#eceef2", bordaForte: "#dcdfe5",
+        acento: "#1d1f24",
+        casca: "#ffffff", cascaSutil: "#ffffff",
+        conteudo: "transparent", conteudoSombra: "none", topo: "rgb(255 255 255 / 0.88)",
+        sombras: sombras("20 22 30", 1.1),
+        menu: {
+          fundo: "#ffffff", fundoSolido: "#ffffff", texto: "#3d4149", textoSuave: "#5d626b", borda: "#ffffff",
+          ativoFundo: "#e3f25a", ativoFundoSolido: "#e3f25a", ativoTexto: "#1d1f24",
+          brilho: "0 6px 16px -10px rgb(140 160 0 / 0.9)", indicador: "transparent",
+        },
+      },
+      escuro: {
+        fundo: "#0f1013", superficie: "#17181c", elevada: "#1f2126",
+        texto: "#eceef2", textoSuave: "#a3a8b1", textoSutil: "#8b9099", borda: "#26282e", bordaForte: "#34373e",
+        acento: "#e3f25a",
+        casca: "#0f1013", cascaSutil: "#0f1013",
+        conteudo: "transparent", conteudoSombra: "none", topo: "rgb(15 16 19 / 0.85)",
+        sombras: sombras("0 0 0", 4),
+        menu: {
+          fundo: "#0f1013", fundoSolido: "#0f1013", texto: "#e6e8ec", textoSuave: "#9aa0a9", borda: "#0f1013",
+          ativoFundo: "#e3f25a", ativoFundoSolido: "#e3f25a", ativoTexto: "#1d1f24",
+          brilho: "none", indicador: "transparent",
+        },
+      },
+    },
+  },
+  {
     id: "obsidiana",
     nome: "Obsidiana",
     categoria: "Luxo noturno",
@@ -589,51 +634,6 @@ export const TEMPLATES: readonly Template[] = [
           fundoSolido: "#2f0817", texto: "#f3d8df", textoSuave: "#b58591", borda: "rgb(255 255 255 / 0.05)",
           ativoFundo: "rgb(231 178 160 / 0.14)", ativoFundoSolido: "#47202a", ativoTexto: "#ffffff",
           brilho: "none", indicador: sec("#e7b2a0"),
-        },
-      },
-    },
-  },
-  {
-    // Fork 见外：o visual do ERP próprio (erp.cicy.vip) — branco puro, nada de bege, profundidade por sombra.
-    // Fica no fim da lista de propósito: merge do upstream não conflita.
-    id: "limao",
-    nome: "Limão",
-    categoria: "Claro e direto",
-    descricao:
-      "Fundo branco puro, item ativo do menu em verde-limão, botões em grafite e cartões com sombra suave. O mesmo visual do ERP da casa.",
-    fonteTexto: "jakarta",
-    fonteTitulo: "jakarta",
-    forma: {
-      ...SEM_RESPIRO,
-      raios: ["8px", "12px", "16px", "20px"],
-      menuRaioItem: "14px", menuDesfoque: "0px", indicadorLargura: "0px",
-      tituloPeso: "600", tituloEspaco: "-0.02em",
-    },
-    cores: {
-      claro: {
-        fundo: "#ffffff", superficie: "#ffffff", elevada: "#f2f3f6",
-        texto: "#1d1f24", textoSuave: "#5d626b", textoSutil: "#6c717a", borda: "#eceef2", bordaForte: "#dcdfe5",
-        acento: "#1d1f24",
-        casca: "#ffffff", cascaSutil: "#ffffff",
-        conteudo: "transparent", conteudoSombra: "none", topo: "rgb(255 255 255 / 0.88)",
-        sombras: sombras("20 22 30", 1.1),
-        menu: {
-          fundo: "#ffffff", fundoSolido: "#ffffff", texto: "#3d4149", textoSuave: "#5d626b", borda: "#ffffff",
-          ativoFundo: "#e3f25a", ativoFundoSolido: "#e3f25a", ativoTexto: "#1d1f24",
-          brilho: "0 6px 16px -10px rgb(140 160 0 / 0.9)", indicador: "transparent",
-        },
-      },
-      escuro: {
-        fundo: "#0f1013", superficie: "#17181c", elevada: "#1f2126",
-        texto: "#eceef2", textoSuave: "#a3a8b1", textoSutil: "#8b9099", borda: "#26282e", bordaForte: "#34373e",
-        acento: "#e3f25a",
-        casca: "#0f1013", cascaSutil: "#0f1013",
-        conteudo: "transparent", conteudoSombra: "none", topo: "rgb(15 16 19 / 0.85)",
-        sombras: sombras("0 0 0", 4),
-        menu: {
-          fundo: "#0f1013", fundoSolido: "#0f1013", texto: "#e6e8ec", textoSuave: "#9aa0a9", borda: "#0f1013",
-          ativoFundo: "#e3f25a", ativoFundoSolido: "#e3f25a", ativoTexto: "#1d1f24",
-          brilho: "none", indicador: "transparent",
         },
       },
     },

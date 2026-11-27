@@ -525,6 +525,9 @@ export function MessageBubble({
         // classe utilitária entrava na conta — foi assim que o painel flutuante
         // fez a spec achar que havia mensagem onde não havia (issue #1318).
         data-testid="message-bubble"
+        // Fork 见外: o template pode pintar a bolha de SAÍDA à parte da cor de ação
+        // (no Limão a ação é grafite, e bolha grafite pesa a conversa inteira).
+        data-bolha={isOutbound && !isBareSticker ? "saida" : undefined}
         className={cn(
           "relative max-w-[75%] min-w-0 text-sm",
           isBareSticker

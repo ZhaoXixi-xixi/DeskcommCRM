@@ -238,3 +238,23 @@ body:has([data-marca-org][data-aparencia]) [data-casca="topo"] {
     box-shadow: var(--aparencia-conteudo-sombra);
   }
 }
+
+/* ── Fork 见外: bolha de saída no Limão ─────────────────────────────────────
+   No Limão a cor de ação é grafite (botões como no ERP da casa). A bolha de
+   saída usa a mesma cor por padrão, e uma conversa inteira em grafite pesa.
+   Aqui ela vira o verde-limão suave do ERP com texto escuro; tudo que a bolha
+   pinta por dentro (hora, tique, link, citação) lê a cor de ação, então basta
+   trocar a cor de ação SÓ dentro dela. */
+body:has([data-marca-org][data-aparencia="limao"]) [data-bolha="saida"] {
+  --color-accent: #eef6c2;
+  --color-accent-fg: #1d1f24;
+  --primary: #eef6c2;
+  --primary-foreground: #1d1f24;
+}
+
+[data-theme="dark"] body:has([data-marca-org][data-aparencia="limao"]) [data-bolha="saida"] {
+  --color-accent: #34391a;
+  --color-accent-fg: #eef6c2;
+  --primary: #34391a;
+  --primary-foreground: #eef6c2;
+}
