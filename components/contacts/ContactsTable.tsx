@@ -299,7 +299,11 @@ export function ContactsTable({
                 href={`/app/contacts/${c.id}`}
                 className="hover:underline max-md:flex max-md:min-h-11 max-md:items-center"
               >
-                {displayName(c)}
+                {c.name?.trim() || c.display_name?.trim() || c.address_book_name?.trim() ? (
+                  displayName(c)
+                ) : (
+                  <span className="text-muted-foreground">{t("Sem nome")}</span>
+                )}
               </Link>
             </TableCell>
             <TableCell className="text-muted-foreground max-md:hidden">

@@ -4,7 +4,7 @@ import { padraoOu } from "@/lib/i18n/datas";
 import { useLocaleDeData } from "@/hooks/i18n/useLocaleDeData";
 
 import { useT } from "@/hooks/i18n/useT";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ShieldCheck, PencilSimple, LockOpen } from "@/lib/ui/icons";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -82,6 +82,9 @@ interface Props {
 }
 
 
+/** Fork 见外 — a origem gravada em minúsculas (`whatsapp`) na grafia da marca. */
+const NOME_DO_CANAL: Record<string, string> = { whatsapp: "WhatsApp", instagram: "Instagram", messenger: "Messenger", telegram: "Telegram", facebook: "Facebook", tiktok: "TikTok", google: "Google" };
+
 export function ContactDetailClient({
   contactId,
   paineisDeModulo = [],
@@ -141,6 +144,15 @@ export function ContactDetailClient({
   const jaTemNome = typeof metadataDoContato.campaign_name === "string";
   const origemGoogle = (metadataDoContato.ad_platform ?? q.data?.data.source) === "google_ads";
   const hierarquia = useHierarquiaDoAnuncio(contactId, !origemGoogle && temAnuncio && !jaTemNome);
+
+  // Fork 见外 — a aba do navegador com o nome do cliente (a página não declara
+  // título, e a aba ficava só com a marca).
+  const nomeNaAba = q.data?.data ? rotuloParaAEquipe(q.data.data, t) : null;
+  useEffect(() => {
+    if (!nomeNaAba) return;
+    const marca = document.title.split(" · ").pop() || document.title;
+    document.title = `${nomeNaAba} · ${marca}`;
+  }, [nomeNaAba]);
 
   if (q.isLoading) {
     return (
@@ -432,7 +444,7 @@ export function ContactDetailClient({
           <TabsTrigger value="overview">{t("Visão geral")}</TabsTrigger>
           <TabsTrigger value="timeline">{t("Linha do tempo")}</TabsTrigger>
           <TabsTrigger value="diagnostico">{t("Diagnóstico")}</TabsTrigger>
-          {isAdmin && <TabsTrigger value="lgpd">LGPD</TabsTrigger>}
+          {isAdmin && <TabsTrigger value="lgpd">{t("LGPD")}</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="overview" className="mt-4">
@@ -443,7 +455,7 @@ export function ContactDetailClient({
                 <dd className="mt-1">{contact.name ?? "—"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase text-muted-foreground">{t("Nome")} · WhatsApp</dt>
+                <dt className="text-xs uppercase text-muted-foreground">{t("Nome · WhatsApp")}</dt>
                 <dd className="mt-1">{contact.display_name ?? "—"}</dd>
               </div>
               {contact.address_book_name && (
@@ -466,6 +478,7 @@ export function ContactDetailClient({
                 vem no payload — "Mostrar" pede ao servidor, que confere papel
                 (gerente ou acima) e audita a leitura.
               */}
+              {contact.cpf_available ? (
               <DocumentoDaFicha
                 contatoId={contact.id}
                 temDocumento={contact.cpf_available}
@@ -473,6 +486,7 @@ export function ContactDetailClient({
                 podeVer={Boolean(activeOrg && roleAtLeast(activeOrg.role, "manager"))}
                 mascararComoCpf={perfilDoPaisDaOrg.codigo === PAIS_PADRAO}
               />
+              ) : null}
               {/*
                 Os telefones da ficha (Spec 31). Sem extra, a linha segue como hoje
                 ("Telefone", com o tipo ao lado); com extra, "Telefones" lista o
@@ -526,7 +540,11 @@ export function ContactDetailClient({
               <div>
                 <dt className="text-xs uppercase text-muted-foreground">{t("Origem")}</dt>
                 <dd className="mt-1">
-                  {origem.origem === ORIGEM_AGENDA_DO_CELULAR ? t("Agenda do celular") : origem.origem}
+                  {origem.origem === ORIGEM_AGENDA_DO_CELULAR
+                    ? t("Agenda do celular")
+                    : localeDaData.code === "zh-CN"
+                      ? (NOME_DO_CANAL[String(origem.origem).toLowerCase()] ?? origem.origem)
+                      : origem.origem}
                 </dd>
                 {origem.inferidaPorHorario && (
                   <dd className="mt-1 text-sm text-muted-foreground">

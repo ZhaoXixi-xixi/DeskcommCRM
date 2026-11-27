@@ -482,7 +482,7 @@ export function ContactsListClient() {
           </Card>
           <div className="flex flex-col items-center gap-2 sm:flex-row sm:justify-between">
             <p className="text-sm text-muted-foreground">
-              {allContacts.length} {allContacts.length === 1 ? t("contato") : t("contatos")}
+              {t("{n} contatos no total").replace("{n}", String(allContacts.length))}
               {q.hasNextPage ? ` ${t("carregados — há mais resultados")}` : ""}
             </p>
             {q.hasNextPage && (
