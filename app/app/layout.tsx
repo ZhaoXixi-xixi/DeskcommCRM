@@ -40,6 +40,7 @@ import { FaixasDeCima } from "@/components/shell/FaixasDeCima";
 import { faixaDaCobranca, type FaixaDaCobranca as Faixa } from "@/lib/cobranca/faixa";
 import { logger } from "@/lib/logger";
 import { IdiomaProvider } from "@/lib/i18n/IdiomaProvider";
+import { TituloDaAba } from "@/components/shell/TituloDaAba";
 import { listarConexoesCaidas, type ConexaoCaida } from "@/lib/channels/health";
 import { VoiceCallProvider } from "@/components/voice/VoiceCallContext";
 import { ProvedorDaOcupacaoDoRodape } from "@/lib/ui/rodape-ocupado";
@@ -324,6 +325,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     // pergunta quem está logado. Ver `lib/i18n/IdiomaProvider`: foi o
     // acoplamento com a autenticação que derrubou 32 casos.
     <IdiomaProvider locale={user.idioma}>
+    <TituloDaAba />
     <AuthProvider user={user} activeOrg={activeOrg}>
       {/*
         A COR DA ETIQUETA, uma leitura por tela.
