@@ -19,6 +19,9 @@ import { perfisDoTextoRetido } from "@/lib/messaging/texto-retido";
 import { camposDoNegocioDosFunis } from "@/lib/leads/compras-do-contato";
 import { capacidadesLigadas } from "@/lib/organizacao/capacidades";
 
+
+// Fork 见外 — título da aba (traduzido no cliente por TituloDaAba).
+export const metadata = { title: "Organização" };
 export const dynamic = "force-dynamic";
 
 interface OrgRow {

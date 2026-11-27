@@ -1,6 +1,9 @@
 import { requireAuth } from "@/lib/auth/server";
 import { AjudaConteudo } from "./_client";
 
+
+// Fork 见外 — título da aba (traduzido no cliente por TituloDaAba).
+export const metadata = { title: "Ajuda" };
 /**
  * A AJUDA DENTRO DO PRODUTO — o índice que faltava (issue #3567, fatia F1).
  *

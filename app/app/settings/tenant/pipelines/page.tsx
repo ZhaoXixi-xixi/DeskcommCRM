@@ -10,6 +10,9 @@ import { PipelinesClient, type EtapaDoFunil, type PipelineRow } from "./_client"
 import { BlueprintDeFunis } from "./_blueprint-de-funis";
 import { traduzir } from "@/lib/i18n/dicionario";
 
+
+// Fork 见外 — título da aba (traduzido no cliente por TituloDaAba).
+export const metadata = { title: "Etapas do funil" };
 export const dynamic = "force-dynamic";
 
 /**

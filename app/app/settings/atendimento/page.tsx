@@ -45,6 +45,9 @@ import { traduzir } from "@/lib/i18n/dicionario";
 import { moduloLigado } from "@/lib/instalacao/modulos";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+
+// Fork 见外 — título da aba (traduzido no cliente por TituloDaAba).
+export const metadata = { title: "Distribuição de atendimento" };
 export const dynamic = "force-dynamic";
 
 export default async function AtendimentoSettingsPage() {

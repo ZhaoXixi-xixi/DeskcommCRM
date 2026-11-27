@@ -35,6 +35,9 @@ import { tagDeIdioma } from "@/lib/i18n/datas";
 import { CredentialsList } from "./_components/CredentialsList";
 import { PainelDeLoginCodex } from "./_components/PainelDeLoginCodex";
 
+
+// Fork 见外 — título da aba (traduzido no cliente por TituloDaAba).
+export const metadata = { title: "Credenciais" };
 export const dynamic = "force-dynamic";
 
 const SAFE_COLUMNS =

@@ -15,6 +15,9 @@ import { traduzir } from "@/lib/i18n/dicionario";
 import { logger } from "@/lib/logger";
 import { UsageDashboardClient } from "./_client";
 
+
+// Fork 见外 — título da aba (traduzido no cliente por TituloDaAba).
+export const metadata = { title: "Uso e orçamento" };
 export const dynamic = "force-dynamic";
 
 interface PageProps {

@@ -4218,7 +4218,7 @@
   "Seguir o idioma da empresa": "跟随公司语言",
   "Não foi possível trocar o idioma. Tente de novo.": "无法切换语言。请重试。",
   "[{ \"key\": \"size\", \"label\": \"Tamanho\", \"type\": \"text\" }]": "[{ \"key\": \"size\", \"label\": \"尺寸\", \"type\": \"text\" }]",
-  "Atrito máximo: a pessoa pediu para sair.": "最大摩擦：对方要求退出。",
+  "Atrito máximo: a pessoa pediu para sair.": "最严重的一种：客户要求以后别再联系他。",
   "Confiança perdida na automação.": "客户对自动回复失去信心。",
   "Contenção": "自动拦截",
   "Conversão": "转化",
