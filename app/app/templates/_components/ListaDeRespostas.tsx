@@ -1,6 +1,7 @@
 "use client";
 
 import { useT } from "@/hooks/i18n/useT";
+import { useIdioma } from "@/lib/i18n/IdiomaProvider";
 import * as React from "react";
 import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd";
 
@@ -76,6 +77,7 @@ function ItemDeResposta({
   draggableProps: Record<string, unknown>;
 }) {
   const t = useT();
+  const idioma = useIdioma();
   /**
    * A MESMA régua da barra e do envio (#3009). Aqui ela vira ETIQUETA: quantas
    * mídias de cada tipo a resposta leva — e o texto do lugar do corpo quando a
@@ -85,7 +87,12 @@ function ItemDeResposta({
   const descricao = !leitura.ok
     ? t("Resposta rápida sem conteúdo")
     : leitura.texto.trim() !== ""
-      ? leitura.texto
+      ? // Fork 见外 — na LISTA a marcação aparece com o nome legível ({{primeiro_nome}} → [联系人姓名]).
+        // Só na leitura: o texto gravado e o que vai ao cliente não mudam.
+        (idioma !== "zh-CN" ? leitura.texto : leitura.texto
+          .replace(/\{\{\s*(primeiro_nome|nome|contact\.name)\s*\}\}/g, `[${t("Nome do contato")}]`)
+          .replace(/\{\{\s*(telefone|contact\.phone_number)\s*\}\}/g, `[${t("Telefone")}]`)
+          .replace(/\{\{\s*(email|contact\.email)\s*\}\}/g, `[${t("Email")}]`))
       : leitura.audios > 0
         ? t("Resposta rápida de áudio")
         : t("Resposta rápida de imagem");
