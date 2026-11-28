@@ -14534,6 +14534,8 @@
   "Vincular paciente ao contato": "将患者关联到联系人",
   "Vincular somente ao contato": "仅关联到联系人",
   "Vinho": "酒红色",
+  "{n} vezes seguidas": "连续 {n} 次",
+  "Mostrar as {n} mais antigas": "显示更早的 {n} 条",
   "Agente com ferramentas": "能调用工具的智能体",
   "Responde pela base de conhecimento": "按资料库回答",
   "Nome · WhatsApp": "WhatsApp 昵称",

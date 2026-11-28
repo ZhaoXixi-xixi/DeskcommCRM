@@ -39,7 +39,7 @@ import { useContactTagVocabulary } from "@/hooks/contacts/useContactTagVocabular
 import { useDeleteContact, mensagemDeBloqueioPorVinculo, destinoDoBloqueio } from "@/hooks/contacts/useDeleteContact";
 import type { ContactOrderBy } from "@/lib/schemas/contacts";
 import type { Contact } from "@/lib/types/contacts";
-import { rotuloParaAEquipe } from "@/lib/contacts/rotulo-do-contato";
+import { nomeDoContato, rotuloParaAEquipe } from "@/lib/contacts/rotulo-do-contato";
 import { phoneForDisplay } from "@/lib/channels/phone-variants";
 import { useConversaNovaComEscolhaDeCanal } from "@/components/channels/SeletorDeCanalParaConversa";
 import { EditContactDialog } from "@/components/contacts/EditContactDialog";
@@ -299,7 +299,7 @@ export function ContactsTable({
                 href={`/app/contacts/${c.id}`}
                 className="hover:underline max-md:flex max-md:min-h-11 max-md:items-center"
               >
-                {c.name?.trim() || c.display_name?.trim() || c.address_book_name?.trim() ? (
+                {nomeDoContato(c) ? (
                   displayName(c)
                 ) : (
                   <span className="text-muted-foreground">{t("Sem nome")}</span>

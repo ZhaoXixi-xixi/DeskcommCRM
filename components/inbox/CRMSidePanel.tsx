@@ -327,6 +327,35 @@ function formatMoney(cents: number | null, currency: string | null): string {
   }
 }
 
+/**
+ * Fork 见外 — a lista de atividade sem a repetição do sistema. Entradas
+ * SEGUIDAS com o mesmo tipo, o mesmo motivo e o mesmo autor viram uma linha com
+ * a contagem (a mais recente fica de capa): "sugestão expirou" todo dia
+ * empurrava o que importa para fora da tela.
+ */
+function agruparAtividades<T extends { type: string; reason?: string | null; actor_kind: string | null; performed_by_name?: string | null }>(
+  lista: readonly T[],
+): { item: T; vezes: number }[] {
+  const grupos: { item: T; vezes: number }[] = [];
+  for (const a of lista) {
+    const ultimo = grupos[grupos.length - 1];
+    if (
+      ultimo &&
+      ultimo.item.type === a.type &&
+      (ultimo.item.reason ?? "") === (a.reason ?? "") &&
+      ultimo.item.actor_kind === a.actor_kind &&
+      (ultimo.item.performed_by_name ?? "") === (a.performed_by_name ?? "")
+    ) {
+      ultimo.vezes += 1;
+    } else {
+      grupos.push({ item: a, vezes: 1 });
+    }
+  }
+  return grupos;
+}
+
+const ATIVIDADES_A_VISTA = 5;
+
 function shortDate(iso: string, locale: Locale): string {
   return format(new Date(iso), padraoDeData(locale, "dataHora"), { locale: locale });
 }
@@ -1642,8 +1671,9 @@ export function CRMSidePanel({
           {sectionsLoading ? (
             <Skeleton className="mt-2 h-14 w-full" />
           ) : activities && activities.length > 0 ? (
-            <ul className="mt-2 space-y-1.5">
-              {activities.map((a) => (
+            (() => {
+              const grupos = agruparAtividades(activities);
+              const linha = ({ item: a, vezes }: { item: (typeof activities)[number]; vezes: number }) => (
                 <li key={a.id} className="rounded-md border border-border p-2 text-xs">
                   {/* Rótulo do vocabulário único (activity-vocabulary), nunca o
                       tipo cru: a tela e o banco divergiram justamente por manter
@@ -1665,10 +1695,24 @@ export function CRMSidePanel({
                   {a.reason && <div className="mt-0.5 truncate text-muted-foreground">{t(a.reason)}</div>}
                   <div className="text-muted-foreground">
                     {a.performed_by_name ?? t(actorLabel(a.actor_kind))} · {shortDate(a.performed_at, localeDaData)}
+                    {vezes > 1 ? ` · ${t("{n} vezes seguidas").replace("{n}", String(vezes))}` : ""}
                   </div>
                 </li>
-              ))}
-            </ul>
+              );
+              return (
+                <>
+                  <ul className="mt-2 space-y-1.5">{grupos.slice(0, ATIVIDADES_A_VISTA).map(linha)}</ul>
+                  {grupos.length > ATIVIDADES_A_VISTA ? (
+                    <details className="mt-1.5">
+                      <summary className="cursor-pointer text-xs text-muted-foreground hover:text-text">
+                        {t("Mostrar as {n} mais antigas").replace("{n}", String(grupos.length - ATIVIDADES_A_VISTA))}
+                      </summary>
+                      <ul className="mt-1.5 space-y-1.5">{grupos.slice(ATIVIDADES_A_VISTA).map(linha)}</ul>
+                    </details>
+                  ) : null}
+                </>
+              );
+            })()
           ) : (
             <SemLista vazio="Sem atividade." erro={erro} onTentarDeNovo={() => setTentativa((n) => n + 1)} />
           )}

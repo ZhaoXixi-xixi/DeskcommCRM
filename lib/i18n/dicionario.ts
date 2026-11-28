@@ -22910,6 +22910,9 @@ export const DICIONARIO: Traducoes = {
   // Fork 见外 — agentes
   "Agente com ferramentas": { es: "Agente con herramientas" },
   "Responde pela base de conhecimento": { es: "Responde con la base de conocimiento" },
+  // Fork 见外 — atividade na inbox
+  "{n} vezes seguidas": { es: "{n} veces seguidas" },
+  "Mostrar as {n} mais antigas": { es: "Mostrar las {n} más antiguas" },
   // Fork 见外 — contatos
   "Nome · WhatsApp": { es: "Nombre · WhatsApp" },
   "{n} contatos no total": { es: "{n} contactos en total" },

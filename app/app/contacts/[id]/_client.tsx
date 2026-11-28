@@ -517,7 +517,7 @@ export function ContactDetailClient({
                   {t("Data de nascimento")}
                 </dt>
                 <dd className="mt-1">
-                  {contact.birthdate ? (localeDaData.code === "zh-CN" ? contact.birthdate : contact.birthdate.split("-").reverse().join("/")) : "—"}
+                  {contact.birthdate ? (localeDaData?.code === "zh-CN" ? contact.birthdate : contact.birthdate.split("-").reverse().join("/")) : "—"}
                 </dd>
               </div>
               {(contact.zip_code || contact.street || contact.city || contact.state) && (
@@ -542,7 +542,7 @@ export function ContactDetailClient({
                 <dd className="mt-1">
                   {origem.origem === ORIGEM_AGENDA_DO_CELULAR
                     ? t("Agenda do celular")
-                    : localeDaData.code === "zh-CN"
+                    : localeDaData?.code === "zh-CN"
                       ? (NOME_DO_CANAL[String(origem.origem).toLowerCase()] ?? origem.origem)
                       : origem.origem}
                 </dd>
